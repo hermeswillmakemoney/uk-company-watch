@@ -3,12 +3,15 @@ UK Company Watch — Filing Check Cron Job.
 Vercel cron: daily at 07:00 UTC. Checks Companies House for new filings, sends alerts.
 """
 
+from flask import Flask, jsonify
 import json
 import os
 import urllib.request
 import urllib.parse
 import base64
 from datetime import datetime, timedelta
+
+app = Flask(__name__)
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 CH_API_KEY = os.environ.get("CH_API_KEY", "")
@@ -183,4 +186,11 @@ def handler(request):
 
     save_db(db, sha)
     print("Done.")
-    return {"statusCode": 200, "body": json.dumps({"filings": len(new_filings), "alerts_sent": sent})}
+    return jsonify({"filings": len(new_filings), "alerts_sent": sent})
+
+
+@app.route("/", methods=["GET", "POST"])
+@app.route("/api/cron", methods=["GET", "POST"])
+def cron_handler():
+    return handler(None)
+

@@ -22,8 +22,8 @@ from pathlib import Path
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
 # Price IDs from Stripe dashboard
-STRIPE_PRICE_PRO = os.environ.get("STRIPE_PRICE_PRO", "")
-STRIPE_PRICE_BUSINESS = os.environ.get("STRIPE_PRICE_BUSINESS", "")
+STRIPE_PRICE_PRO = os.environ.get("STRIPE_PRICE_PRO", "price_1TXSqILyJWmpaKc9lnjQ2KoI")
+STRIPE_PRICE_BUSINESS = os.environ.get("STRIPE_PRICE_BUSINESS", "price_1TXSr6LyJWmpaKc9xGV1iVtW")
 # Base URL for webhook callbacks
 UCW_BASE_URL = os.environ.get("UCW_BASE_URL", "https://uk-company-watch.vercel.app")
 
@@ -73,6 +73,17 @@ def init_db():
         CREATE INDEX IF NOT EXISTS idx_summaries_date ON filing_summaries(summary_date);
     """)
     conn.commit()
+
+    # Migrate: add Stripe columns if they don't exist
+    try:
+        c.execute("SELECT stripe_subscription_id FROM subscribers LIMIT 1")
+    except sqlite3.OperationalError:
+        c.execute("ALTER TABLE subscribers ADD COLUMN stripe_subscription_id TEXT")
+        c.execute("ALTER TABLE subscribers ADD COLUMN stripe_customer_id TEXT")
+        c.execute("ALTER TABLE subscribers ADD COLUMN subscription_status TEXT")
+        c.execute("ALTER TABLE subscribers ADD COLUMN current_period_end TEXT")
+        conn.commit()
+
     return conn
 
 
@@ -526,12 +537,40 @@ def process_telegram_commands(conn):
             except Exception as e:
                 send_telegram(chat_id, f"Error: {e}")
         elif text.startswith("upgraded_"):
-            # User returned from successful checkout
+            # User returned from successful checkout — fetch subscription from Stripe
             plan = text.replace("upgraded_", "")
+            limits = PLAN_LIMITS.get(plan, PLAN_LIMITS["free"])
+            # Try to get the subscription ID from Stripe and store it
+            try:
+                # List checkout sessions for this customer to find the subscription
+                data = urllib.parse.urlencode({
+                    "limit": "1",
+                }).encode()
+                req = urllib.request.Request(
+                    "https://api.stripe.com/v1/checkout/sessions",
+                    data=data,
+                    headers={"Authorization": f"Bearer {STRIPE_SECRET_KEY}"},
+                )
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    sessions = json.loads(resp.read().decode())
+                    for session in sessions.get("data", []):
+                        if session.get("metadata", {}).get("chat_id") == chat_id:
+                            sub_id = session.get("subscription", "")
+                            customer_id = session.get("customer", "")
+                            if sub_id:
+                                c.execute("""UPDATE subscribers SET
+                                    stripe_subscription_id=?, stripe_customer_id=?,
+                                    subscription_status='active'
+                                    WHERE chat_id=?""", (sub_id, customer_id, chat_id))
+                                conn.commit()
+                            break
+            except Exception as e:
+                print(f"Error fetching subscription for {chat_id}: {e}")
+
             send_telegram(chat_id,
                 f"✅ <b>Welcome to {plan.capitalize()}!</b>\n\n"
-                f"Your subscription is now active. You have {PLAN_LIMITS[plan]['max_watched']} watches "
-                f"and {PLAN_LIMITs[plan]['max_alerts_per_day']} alerts/day.\n\n"
+                f"Your subscription is being activated. You have {limits['max_watched']} watches "
+                f"and {limits['max_alerts_per_day']} alerts/day.\n\n"
                 "Use /watchlists to join group watchlists or /watch [number] to watch individual companies."
             )
         elif text.startswith("/search "):
@@ -651,6 +690,62 @@ def cleanup_old_summaries(conn, days=7):
         print(f"  Cleaned {c.rowcount} old summaries")
 
 
+# ─── Stripe sync ───
+
+def sync_stripe_subscriptions(conn):
+    """Sync subscription status with Stripe. Runs on every bot cycle."""
+    if not STRIPE_SECRET_KEY:
+        return
+
+    c = conn.cursor()
+    c.execute("SELECT chat_id, stripe_subscription_id, stripe_customer_id FROM subscribers WHERE stripe_subscription_id IS NOT NULL OR stripe_customer_id IS NOT NULL")
+    rows = c.fetchall()
+    if not rows:
+        return
+
+    updated = 0
+    for chat_id, sub_id, customer_id in rows:
+        try:
+            # Check subscription status in Stripe
+            if sub_id:
+                data = urllib.parse.urlencode({}).encode()
+                req = urllib.request.Request(
+                    f"https://api.stripe.com/v1/subscriptions/{sub_id}",
+                    headers={"Authorization": f"Bearer {STRIPE_SECRET_KEY}"},
+                )
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    sub = json.loads(resp.read().decode())
+                    status = sub.get("status", "")
+                    period_end = sub.get("current_period_end", "")
+
+                    if status in ("active", "trialing"):
+                        # Get price to determine plan
+                        price_id = sub.get("items", {}).get("data", [{}])[0].get("price", {}).get("id", "")
+                        if price_id == STRIPE_PRICE_PRO:
+                            plan = "pro"
+                        elif price_id == STRIPE_PRICE_BUSINESS:
+                            plan = "business"
+                        else:
+                            plan = "pro"  # fallback
+
+                        limits = PLAN_LIMITS.get(plan, PLAN_LIMITS["free"])
+                        c.execute("""UPDATE subscribers SET plan=?, subscription_status=?, current_period_end=?,
+                            max_watched=?, max_alerts_per_day=? WHERE chat_id=?""",
+                            (plan, "active", str(period_end), limits["max_watched"], limits["max_alerts_per_day"], chat_id))
+                        updated += 1
+                    elif status in ("canceled", "unpaid", "past_due"):
+                        c.execute("""UPDATE subscribers SET plan='free', subscription_status=?,
+                            max_watched=1, max_alerts_per_day=3 WHERE chat_id=?""",
+                            (status, chat_id))
+                        updated += 1
+        except Exception as e:
+            print(f"  Stripe sync error for {chat_id}: {e}")
+
+    if updated:
+        conn.commit()
+        print(f"  Synced {updated} subscriptions from Stripe")
+
+
 # ─── Main ───
 
 def main():
@@ -661,17 +756,20 @@ def main():
     print("\n[1] Processing Telegram commands...")
     process_telegram_commands(conn)
 
-    print("\n[2] Checking watched companies for new filings...")
+    print("\n[2] Syncing Stripe subscriptions...")
+    sync_stripe_subscriptions(conn)
+
+    print("\n[3] Checking watched companies for new filings...")
     watched = get_all_watched_company_numbers(conn)
     print(f"  {len(watched)} companies to check")
     new_filings = check_filings_for_companies(conn, watched)
     print(f"  {len(new_filings)} new filings found")
 
-    print("\n[3] Generating summaries...")
+    print("\n[4] Generating summaries...")
     summary_count = process_new_filings(conn, new_filings)
     print(f"  {summary_count} summaries stored")
 
-    print("\n[4] Sending per-user alerts...")
+    print("\n[5] Sending per-user alerts...")
     sent = send_per_user_alerts(conn)
     print(f"  Alerts sent to {sent} users")
 

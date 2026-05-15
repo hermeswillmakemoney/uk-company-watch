@@ -70,11 +70,186 @@ def init_db():
             first_seen TEXT DEFAULT CURRENT_TIMESTAMP,
             alerted INTEGER DEFAULT 0
         );
+        CREATE TABLE IF NOT EXISTS watchlists (
+            code TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            description TEXT,
+            icon TEXT DEFAULT '📋',
+            company_count INTEGER DEFAULT 0
+        );
+        CREATE TABLE IF NOT EXISTS watchlist_companies (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            watchlist_code TEXT NOT NULL,
+            company_number TEXT NOT NULL,
+            company_name TEXT,
+            FOREIGN KEY(watchlist_code) REFERENCES watchlists(code),
+            UNIQUE(watchlist_code, company_number)
+        );
+        CREATE TABLE IF NOT EXISTS watchlist_subscribers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chat_id TEXT NOT NULL,
+            watchlist_code TEXT NOT NULL,
+            joined_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(watchlist_code) REFERENCES watchlists(code),
+            UNIQUE(chat_id, watchlist_code)
+        );
         CREATE INDEX IF NOT EXISTS idx_filings_company ON known_filings(company_number);
         CREATE INDEX IF NOT EXISTS idx_watched_chat ON watched_companies(chat_id);
+        CREATE INDEX IF NOT EXISTS idx_wl_subs_chat ON watchlist_subscribers(chat_id);
+        CREATE INDEX IF NOT EXISTS idx_wl_companies_code ON watchlist_companies(watchlist_code);
     """)
     conn.commit()
     return conn
+
+
+# ─── Watchlists ───
+
+WATCHLISTS = {
+    "fintech": {
+        "name": "UK Fintech",
+        "icon": "💳",
+        "description": "15 major UK fintechs: Revolut, Starling, Wise, GoCardless, Funding Circle, Monese, Clearbank, Railsr, Soldo, Plum Fintech, Atom Bank, Tandem, Nutmeg, Cleo, Wombat",
+        "companies": [
+            ("08804411", "REVOLUT LTD"),
+            ("09092149", "STARLING BANK LIMITED"),
+            ("13211214", "WISE LIMITED"),
+            ("07495895", "GOCARDLESS LTD"),
+            ("06968588", "FUNDING CIRCLE LTD"),
+            ("08720992", "MONESE LTD"),
+            ("09736376", "CLEARBANK LIMITED"),
+            ("14002844", "RAILSROCKET LTD"),
+            ("14361848", "SOLDO LTD"),
+            ("09952199", "PLUM FINTECH LTD"),
+            ("08632552", "ATOM BANK PLC"),
+            ("00955491", "TANDEM BANK LIMITED"),
+            ("OC458635", "NUTMEG SAVING AND INVESTMENT LIMITED"),
+            ("SL027367", "CLEO AI LTD"),
+            ("SC709218", "WOMBAT INVESTING LTD"),
+        ],
+    },
+    "crypto": {
+        "name": "UK Crypto & Blockchain",
+        "icon": "🪙",
+        "description": "10 UK crypto & blockchain firms: Kraken, Bitstamp, Chainalysis, Copper, Fireblocks + more",
+        "companies": [
+            ("14701136", "KRAKEN UK LTD"),
+            ("08157033", "BITSTAMP UK LTD"),
+            ("11434241", "CHAINALYSIS LTD"),
+            ("03772048", "COPPER TECHNOLOGIES LTD"),
+            ("13650687", "FIREBLOCKS LTD"),
+            ("13974557", "BITSTAMP UK LTD"),
+            ("12254454", "KRAKEN UK LTD"),
+            ("11125610", "COINBASE UK LTD"),
+            ("10004019", "CRYPTOCOM LTD"),
+            ("11537321", "GEMINI EUROPE LIMITED"),
+        ],
+    },
+    "ai": {
+        "name": "UK AI & Machine Learning",
+        "icon": "🤖",
+        "description": "10 leading UK AI companies: Graphcore, Improbable, Faculty AI, Onfido, Tractable, Stability AI, Hugging Face, Darktrace + more",
+        "companies": [
+            ("10185006", "GRAPHCORE LTD"),
+            ("08561272", "IMPROBABLE WORLDS LTD"),
+            ("16594137", "FACULTY AI LTD"),
+            ("07479524", "ONFIDO LTD"),
+            ("09315523", "TRACTABLE LTD"),
+            ("12295325", "STABILITY AI LTD"),
+            ("16465668", "HUGGING FACE LTD"),
+            ("13264637", "DARKTRACE PLC"),
+            ("15588410", "DEEPMIND TECHNOLOGIES LTD"),
+            ("08713046", "WAYVE TECHNOLOGIES LTD"),
+        ],
+    },
+    "property": {
+        "name": "UK Property & PropTech",
+        "icon": "🏠",
+        "description": "15 UK property & proptech firms: Rightmove, Zoopla, OnTheMarket, Purplebricks, Foxtons, Savills, Knight Frank, JLL, LendInvest, Homelet, Goodlord, Flatfair, Molo + more",
+        "companies": [
+            ("06426485", "RIGHTMOVE PLC"),
+            ("06074771", "ZOPLA PROPERTY LTD"),
+            ("10887621", "ONTHEMARKET PLC"),
+            ("15846533", "PURPLEBRICKS GROUP PLC"),
+            ("01680058", "FOXTONS GROUP PLC"),
+            ("02122174", "SAVILLS PLC"),
+            ("OC305934", "KNIGHT FRANK LLP"),
+            ("16760486", "JONES LANG LASALLE PLC"),
+            ("16582814", "CUSHMAN & WAKEFIELD PLC"),
+            ("08146929", "LENDINVEST PLC"),
+            ("15034787", "HOMELET LTD"),
+            ("17204403", "GOODLORD LTD"),
+            ("10487576", "FLATFAIR LTD"),
+            ("11726983", "MOLO FINANCE LTD"),
+            ("08657841", "LANDLORD VISION LTD"),
+        ],
+    },
+    "retail": {
+        "name": "UK Retail & E-Commerce",
+        "icon": "🛒",
+        "description": "9 major UK retailers: ASOS, THG, Ocado, Deliveroo, Just Eat, HelloFresh UK, Wayfair UK, Amazon UK + more",
+        "companies": [
+            ("04006623", "ASOS PLC"),
+            ("06539496", "THG PLC"),
+            ("16235474", "OCADO GROUP PLC"),
+            ("13227665", "DELIVEROO PLC"),
+            ("06947854", "JUST EAT TAKEAWAY.COM PLC"),
+            ("16626640", "HELLOFRESH UK LTD"),
+            ("06776852", "WAYFAIR UK LTD"),
+            ("03223028", "AMAZON UK SERVICES LTD"),
+            ("15891239", "GOUSTO LTD"),
+        ],
+    },
+    "insurtech": {
+        "name": "UK InsurTech",
+        "icon": "🛡️",
+        "description": "8 UK insurtechs: Zego, Cuvva, Bought By Many, By Miles, Reclaim247, So-Sure, Laka + more",
+        "companies": [
+            ("14695368", "ZEGO LTD"),
+            ("08907985", "CUVVA LTD"),
+            ("12735852", "BOUGHT BY MANY LTD"),
+            ("09498559", "BY MILES LTD"),
+            ("11382136", "RECLAIM247 LTD"),
+            ("09365669", "SO-SURE LTD"),
+            ("10575209", "LAKA LTD"),
+            ("08624700", "DEAD HAPPY LTD"),
+        ],
+    },
+}
+
+
+def init_watchlists(conn):
+    """Initialize pre-built watchlists in the database."""
+    c = conn.cursor()
+    for code, wl in WATCHLISTS.items():
+        c.execute(
+            "INSERT OR IGNORE INTO watchlists (code, name, description, icon, company_count) VALUES (?, ?, ?, ?, ?)",
+            (code, wl["name"], wl["description"], wl["icon"], len(wl["companies"])),
+        )
+        for num, name in wl["companies"]:
+            c.execute(
+                "INSERT OR IGNORE INTO watchlist_companies (watchlist_code, company_number, company_name) VALUES (?, ?, ?)",
+                (code, num, name),
+            )
+    conn.commit()
+
+
+def get_watchlist_count(chat_id, conn):
+    """Get total watchlist subscriptions for a user."""
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM watchlist_subscribers WHERE chat_id = ?", (str(chat_id),))
+    return c.fetchone()[0]
+
+
+def get_watched_count(chat_id, conn):
+    """Get total individual company watches for a user."""
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM watched_companies WHERE chat_id = ?", (str(chat_id),))
+    return c.fetchone()[0]
+
+
+def get_total_watch_count(chat_id, conn):
+    """Get total watched items (individual + watchlists)."""
+    return get_watched_count(chat_id, conn) + get_watchlist_count(chat_id, conn)
 
 
 # ─── Companies House API ───
@@ -186,14 +361,12 @@ def handle_company(chat_id, num):
 
 def handle_watch(chat_id, num, conn):
     c = conn.cursor()
-    c.execute("SELECT max_watched FROM subscribers WHERE chat_id = ?", (str(chat_id),))
-    row = c.fetchone()
-    max_watched = row[0] if row else 1
-    c.execute("SELECT COUNT(*) FROM watched_companies WHERE chat_id = ?", (str(chat_id),))
-    current = c.fetchone()[0]
+    sub = c.execute("SELECT max_watched FROM subscribers WHERE chat_id = ?", (str(chat_id),)).fetchone()
+    max_watched = sub[0] if sub else 1
+    total = get_total_watch_count(chat_id, conn)
 
-    if current >= max_watched:
-        send_telegram(chat_id, f"You're watching {current}/{max_watched} companies. Use /pricing to upgrade.")
+    if total >= max_watched:
+        send_telegram(chat_id, f"You're at your watch limit ({total}/{max_watched}). Use /pricing to upgrade, or /leave [code] to leave a watchlist first.")
         return
 
     data = ch_fetch(f"/company/{num}")
@@ -212,13 +385,100 @@ def handle_watching(chat_id, conn):
     c = conn.cursor()
     c.execute("SELECT company_number, company_name FROM watched_companies WHERE chat_id = ?", (str(chat_id),))
     watched = c.fetchall()
-    if watched:
-        lines = ["📋 Your watched companies:\n"]
-        for num, name in watched:
-            lines.append(f"• <b>{name}</b> ({num})")
-        send_telegram(chat_id, "\n".join(lines))
+
+    # Also get watchlist subscriptions
+    c.execute("""
+        SELECT w.code, w.name, w.icon, w.company_count 
+        FROM watchlist_subscribers ws 
+        JOIN watchlists w ON ws.watchlist_code = w.code 
+        WHERE ws.chat_id = ?
+    """, (str(chat_id),))
+    wl_subs = c.fetchall()
+
+    if not watched and not wl_subs:
+        send_telegram(chat_id, "You're not watching anything. Use /watch [number] for individual companies, or /watchlists to browse group watchlists.")
+        return
+
+    lines = ["📋 Your watched items:\n"]
+    for num, name in watched:
+        lines.append(f"• <b>{name}</b> ({num})")
+    for code, name, icon, count in wl_subs:
+        lines.append(f"{icon} <b>{name}</b> ({count} companies) — /leave {code}")
+    send_telegram(chat_id, "\n".join(lines))
+
+
+def handle_watchlists(chat_id, conn):
+    """Show available watchlists."""
+    c = conn.cursor()
+    c.execute("SELECT code, name, description, icon, company_count FROM watchlists ORDER BY name")
+    watchlists = c.fetchall()
+
+    if not watchlists:
+        send_telegram(chat_id, "No watchlists available yet.")
+        return
+
+    lines = ["📋 <b>Group Watchlists</b>\n"]
+    lines.append("Join a watchlist to monitor multiple companies at once. Each watchlist counts as 1 watch.\n")
+    for code, name, desc, icon, count in watchlists:
+        lines.append(f"{icon} <b>{name}</b> — {count} companies")
+        lines.append(f"   {desc}")
+        lines.append(f"   /join {code}\n")
+    lines.append("Use /watching to see what you've joined.")
+    send_telegram(chat_id, "\n".join(lines))
+
+
+def handle_join(chat_id, code, conn):
+    """Join a watchlist."""
+    c = conn.cursor()
+    code = code.lower().strip()
+
+    # Check if watchlist exists
+    c.execute("SELECT name, icon, company_count FROM watchlists WHERE code = ?", (code,))
+    wl = c.fetchone()
+    if not wl:
+        send_telegram(chat_id, f"Watchlist '{code}' not found. Use /watchlists to see available groups.")
+        return
+
+    name, icon, count = wl
+
+    # Check if already joined
+    c.execute("SELECT 1 FROM watchlist_subscribers WHERE chat_id = ? AND watchlist_code = ?", (str(chat_id), code))
+    if c.fetchone():
+        send_telegram(chat_id, f"You've already joined {icon} {name}. Use /watching to see all your subscriptions.")
+        return
+
+    # Check watch limit
+    sub = c.execute("SELECT max_watched FROM subscribers WHERE chat_id = ?", (str(chat_id),)).fetchone()
+    max_watched = sub[0] if sub else 1
+    total = get_total_watch_count(chat_id, conn)
+    if total >= max_watched:
+        send_telegram(chat_id, f"You're at your watch limit ({total}/{max_watched}). Use /pricing to upgrade, or /leave [code] to leave a watchlist first.")
+        return
+
+    # Join
+    c.execute("INSERT INTO watchlist_subscribers (chat_id, watchlist_code) VALUES (?, ?)", (str(chat_id), code))
+    conn.commit()
+    send_telegram(chat_id, f"✅ Joined {icon} <b>{name}</b>! You're now monitoring {count} companies. You'll receive alerts for any new filings.")
+
+
+def handle_leave(chat_id, code, conn):
+    """Leave a watchlist."""
+    c = conn.cursor()
+    code = code.lower().strip()
+
+    c.execute("SELECT name, icon FROM watchlists WHERE code = ?", (code,))
+    wl = c.fetchone()
+    if not wl:
+        send_telegram(chat_id, f"Watchlist '{code}' not found.")
+        return
+
+    name, icon = wl
+    c.execute("DELETE FROM watchlist_subscribers WHERE chat_id = ? AND watchlist_code = ?", (str(chat_id), code))
+    if c.rowcount > 0:
+        conn.commit()
+        send_telegram(chat_id, f"Left {icon} {name}. You'll no longer receive alerts for this group.")
     else:
-        send_telegram(chat_id, "You're not watching any companies. Use /watch [number] to start.")
+        send_telegram(chat_id, f"You're not subscribed to {icon} {name}.")
 
 
 def handle_digest(chat_id, conn):
@@ -292,7 +552,7 @@ def process_updates(conn):
         if text == "/start":
             handle_start(chat_id)
         elif text == "/help":
-            send_telegram(chat_id, "Commands:\n/search [name]\n/company [number]\n/watch [number]\n/watching\n/digest\n/pricing")
+            send_telegram(chat_id, "Commands:\n/search [name]\n/company [number]\n/watch [number]\n/watching\n/watchlists\n/join [code]\n/leave [code]\n/digest\n/pricing")
         elif text.startswith("/search "):
             handle_search(chat_id, text[8:].strip())
         elif text.startswith("/company "):
@@ -301,6 +561,12 @@ def process_updates(conn):
             handle_watch(chat_id, text[7:].strip(), conn)
         elif text == "/watching":
             handle_watching(chat_id, conn)
+        elif text == "/watchlists":
+            handle_watchlists(chat_id, conn)
+        elif text.startswith("/join "):
+            handle_join(chat_id, text[6:].strip(), conn)
+        elif text.startswith("/leave "):
+            handle_leave(chat_id, text[7:].strip(), conn)
         elif text == "/digest":
             handle_digest(chat_id, conn)
         elif text == "/pricing":
@@ -361,18 +627,37 @@ def check_new_companies(conn):
             pass
     return new_count
 
-
 def check_watched_filings(conn):
-    """Check filing history for watched companies."""
+    """Check filing history for individually watched companies AND watchlist companies."""
     print("Checking watched companies...")
     c = conn.cursor()
-    c.execute("SELECT DISTINCT company_number FROM watched_companies")
-    watched = [row[0] for row in c.fetchall()]
-    if not watched:
-        return []
 
-    new_filings = []
-    for num in watched:
+    # Get individually watched companies
+    c.execute("SELECT DISTINCT company_number FROM watched_companies")
+    individual = set(row[0] for row in c.fetchall())
+
+    # Get watchlist companies (from all watchlists that have subscribers)
+    c.execute("""
+        SELECT DISTINCT wc.company_number, wc.company_name, ws.chat_id
+        FROM watchlist_companies wc
+        JOIN watchlist_subscribers ws ON wc.watchlist_code = ws.watchlist_code
+    """)
+    watchlist_filings = {}  # chat_id -> list of new filings
+    watchlist_companies = set()
+    for num, name, chat_id in c.fetchall():
+        watchlist_companies.add(num)
+        if chat_id not in watchlist_filings:
+            watchlist_filings[chat_id] = []
+
+    all_companies = individual | watchlist_companies
+    if not all_companies:
+        print("  No watched companies or active watchlists.")
+        return [], {}
+
+    new_individual = []
+    new_watchlist = {}  # chat_id -> list of filings
+
+    for num in all_companies:
         data = ch_fetch(f"/company/{num}/filing-history?items_per_page=3")
         if not data or "items" not in data:
             continue
@@ -384,13 +669,30 @@ def check_watched_filings(conn):
                 c.execute("INSERT INTO known_filings (company_number, filing_date, filing_type, description) VALUES (?, ?, ?, ?)",
                           (num, fdate, ftype, desc))
                 conn.commit()
-                new_filings.append({"company_number": num, "date": fdate, "type": ftype, "description": desc})
+                filing = {"company_number": num, "date": fdate, "type": ftype, "description": desc}
+
+                if num in individual:
+                    new_individual.append(filing)
+
+                # Add to watchlist subscribers
+                if num in watchlist_companies:
+                    c.execute("""
+                        SELECT ws.chat_id FROM watchlist_subscribers ws
+                        JOIN watchlist_companies wc ON ws.watchlist_code = wc.watchlist_code
+                        WHERE wc.company_number = ?
+                    """, (num,))
+                    for row in c.fetchall():
+                        cid = row[0]
+                        if cid not in new_watchlist:
+                            new_watchlist[cid] = []
+                        new_watchlist[cid].append(filing)
+
                 print(f"  New filing: {num} — {fdate} {ftype}")
             except sqlite3.IntegrityError:
                 pass
-        time.sleep(0.5)  # Rate limit: 60 req/5min without API key
+        time.sleep(0.5)  # Rate limit
 
-    return new_filings
+    return new_individual, new_watchlist
 
 
 def send_insolvency_alerts(conn, new_insolvencies):
@@ -436,30 +738,59 @@ def main():
         print("WARNING: No TELEGRAM_BOT_TOKEN set. Bot will not send messages.")
 
     conn = init_db()
+    init_watchlists(conn)
 
     # 1. Process Telegram messages
-    print("\n[1/4] Processing Telegram messages...")
+    print("\n[1/5] Processing Telegram messages...")
     process_updates(conn)
 
     # 2. Check insolvencies
-    print("\n[2/4] Checking insolvencies...")
+    print("\n[2/5] Checking insolvencies...")
     new_ins = check_insolvencies(conn)
 
     # 3. Check new companies
-    print("\n[3/4] Checking new companies...")
+    print("\n[3/5] Checking new companies...")
     new_com = check_new_companies(conn)
 
-    # 4. Check watched company filings
-    print("\n[4/4] Checking watched company filings...")
-    new_filings = check_watched_filings(conn)
+    # 4. Check watched company filings (individual + watchlist)
+    print("\n[4/5] Checking watched company filings...")
+    new_individual, new_watchlist = check_watched_filings(conn)
 
     # 5. Send alerts
     print("\n[5/5] Sending alerts...")
     send_insolvency_alerts(conn, new_ins)
 
+    # Send watchlist filing alerts
+    for chat_id, filings in new_watchlist.items():
+        if filings:
+            lines = ["📋 <b>Watchlist Filing Alerts</b>\n"]
+            for f in filings[:5]:
+                lines.append(f"• {f['company_number']} — {f['date']} {f['type']}")
+                lines.append(f"  {f['description'][:80]}\n")
+            send_telegram(chat_id, "\n".join(lines))
+            time.sleep(0.1)
+
+    # Send individual filing alerts (only for companies each user specifically watches)
+    c = conn.cursor()
+    c.execute("SELECT DISTINCT chat_id FROM watched_companies")
+    for row in c.fetchall():
+        cid = str(row[0])
+        # Get this user's watched company numbers
+        c2 = conn.cursor()
+        c2.execute("SELECT company_number FROM watched_companies WHERE chat_id = ?", (cid,))
+        user_nums = set(r[0] for r in c2.fetchall())
+        user_filings = [f for f in new_individual if f["company_number"] in user_nums]
+        if user_filings:
+            lines = ["📋 <b>New Filing Alerts</b>\n"]
+            for f in user_filings[:5]:
+                lines.append(f"• {f['company_number']} — {f['date']} {f['type']}")
+                lines.append(f"  {f['description'][:80]}\n")
+            send_telegram(cid, "\n".join(lines))
+            time.sleep(0.1)
+
     # Summary
     print(f"\n{'='*60}")
-    print(f"Summary: {new_ins} insolvencies, {new_com} new companies, {len(new_filings)} new filings")
+    print(f"Summary: {new_ins} insolvencies, {new_com} new companies, {len(new_individual)} individual filings, {len(new_watchlist)} watchlist alerts")
     print(f"{'='*60}\n")
 
     conn.close()

@@ -2,8 +2,8 @@
   "version": 2,
   "framework": null,
   "routes": [
-    { "src": "/api/webhook", "dest": "/api/webhook.py" },
-    { "src": "/api/cron", "dest": "/api/cron.py" }
+    { "src": "/api/(.*)", "dest": "/api/$1.py" },
+    { "src": "/(.*)", "dest": "/public/$1" }
   ],
   "crons": [
     {

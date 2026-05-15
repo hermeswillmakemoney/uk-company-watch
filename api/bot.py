@@ -1,6 +1,6 @@
 """
 UK Company Watch — Telegram Bot Webhook Handler.
-Deployed as a Vercel serverless function at /api/bot.
+Vercel serverless function at /api/bot.
 """
 
 import json
@@ -277,6 +277,7 @@ def handle_command(db, chat_id, text):
     return None
 
 
+# Vercel Python serverless function entry point
 def handler(request):
     if request.method == "GET":
         return {"statusCode": 200, "body": "UK Company Watch Bot — OK"}
@@ -294,9 +295,9 @@ def handler(request):
         return {"statusCode": 200, "body": "ok"}
 
     db, sha = load_db()
-    response = handle_command(db, chat_id, text)
+    result = handle_command(db, chat_id, text)
 
-    if response:
-        send_telegram(chat_id, response)
+    if result:
+        send_telegram(chat_id, result)
 
     return {"statusCode": 200, "body": "ok"}

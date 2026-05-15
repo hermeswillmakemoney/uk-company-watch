@@ -1,6 +1,6 @@
 """
 UK Company Watch — Filing Check Cron Job.
-Vercel cron: hourly. Checks Companies House for new filings, sends per-user alerts.
+Vercel cron: daily at 07:00 UTC. Checks Companies House for new filings, sends alerts.
 """
 
 import json
@@ -8,7 +8,6 @@ import os
 import urllib.request
 import urllib.parse
 import base64
-import time
 from datetime import datetime, timedelta
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
@@ -27,13 +26,13 @@ FILING_TYPE_MAP = {
     "CH03": ("Director details changed", "routine", "A director's details were updated."),
     "CS01": ("Confirmation statement", "routine", "Company filed its confirmation statement."),
     "AD01": ("Address changed", "notable", "Company changed its registered address."),
-    "SH01": ("Shares allotted", "notable", "Company issued new shares — could indicate fundraising."),
+    "SH01": ("Shares allotted", "notable", "Company issued new shares."),
     "SH06": ("Shares allotted", "notable", "Company allotted new shares."),
-    "MG01": ("Mortgage/charge", "concerning", "Company registered a mortgage or charge — secured debt taken on."),
+    "MG01": ("Mortgage/charge", "concerning", "Company registered a mortgage or charge."),
     "LIQ01": ("Liquidation", "critical", "Company entered liquidation."),
     "WUO1": ("Winding up", "critical", "Company is being wound up."),
     "DS01": ("Dissolution", "concerning", "Company applied for dissolution."),
-    "GAZ1": ("Gazette notice", "notable", "Gazette notice published — often relates to strike-off or insolvency."),
+    "GAZ1": ("Gazette notice", "notable", "Gazette notice published."),
     "GAZ2": ("Gazette notice", "notable", "Gazette notice published."),
     "TM01": ("Termination", "notable", "A director or officer's appointment was terminated."),
     "TM02": ("Termination", "notable", "A director or officer's appointment was terminated."),
@@ -41,30 +40,12 @@ FILING_TYPE_MAP = {
     "AP04": ("Director appointed", "notable", "A new director was appointed."),
     "NEWINC": ("Incorporation", "routine", "New company incorporated."),
     "CERTNM": ("Name change", "notable", "Company changed its name."),
-    "CERT10": ("Incorporation", "routine", "Certificate of incorporation issued."),
-    "MA": ("Merger/acquisition", "notable", "Merger or acquisition activity detected."),
-    "RESOLUTIONS": ("Special resolution", "notable", "Company passed a special resolution."),
     "MR01": ("Mortgage registered", "concerning", "A mortgage was registered against the company."),
     "MR04": ("Mortgage satisfied", "routine", "A mortgage was satisfied/released."),
     "PSC01": ("PSC update", "notable", "Person with Significant Control information updated."),
     "PSC02": ("PSC update", "notable", "PSC information changed."),
-    "PSC04": ("PSC update", "notable", "PSC information changed."),
-    "PSC05": ("PSC update", "notable", "PSC information changed."),
-    "PSC07": ("PSC update", "notable", "PSC information changed."),
-    "PSC08": ("PSC update", "notable", "PSC information changed."),
-    "PSC09": ("PSC update", "notable", "PSC information changed."),
     "RP01": ("Share buyback", "notable", "Company purchased its own shares."),
-    "AAMD": ("Accounts amended", "routine", "Company accounts were amended."),
-    "AM10": ("Accounts amended", "routine", "Amended accounts filed."),
-    "AM19": ("Accounts amended", "routine", "Amended accounts filed."),
-    "AM23": ("Accounts amended", "routine", "Amended accounts filed."),
-    "RR02": ("Re-registration", "notable", "Company re-registered (e.g. from private to public)."),
-    "MAR": ("Re-registration", "notable", "Company re-registered its memorandum and articles."),
-    "LLAA01": ("LLP annual return", "routine", "Limited liability partnership filed annual return."),
-    "LLIN01": ("LLP incorporated", "routine", "New LLP incorporated."),
-    "LLTM01": ("LLP termination", "concerning", "LLP termination."),
-    "LP6": ("LP filing", "routine", "Limited partnership filing."),
-    "SLPCS01": ("Scottish LP", "routine", "Scottish limited partnership filing."),
+    "RR02": ("Re-registration", "notable", "Company re-registered."),
 }
 
 
@@ -82,10 +63,7 @@ def generate_summary(company_name, company_number, filing_date, filing_type, des
         flag = " ⚠️"
     elif severity == "notable":
         flag = " 📌"
-    desc = ""
-    if description and len(description) > 5 and description != "No description available":
-        desc = f" ({description[:80]})"
-    return f"{company_name} ({company_number}): {label} on {filing_date}.{flag} {explanation}{desc}"
+    return f"{company_name} ({company_number}): {label} on {filing_date}.{flag} {explanation}"
 
 
 def send_telegram(chat_id, text):
@@ -120,7 +98,7 @@ def ch_fetch(path):
 
 
 def handler(request):
-    print(f"\n{'='*60}\nUCW Cron — {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}\n{'='*60}")
+    print(f"UCW Cron — {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}")
 
     db, sha = load_db()
     init_watchlists(db)
@@ -137,7 +115,7 @@ def handler(request):
 
     print(f"  {len(all_companies)} companies to check")
 
-    # Check filings
+    # Check filings (only most recent per company to stay within timeout)
     new_filings = []
     today = datetime.utcnow().strftime("%Y-%m-%d")
     known_set = set()
@@ -165,7 +143,7 @@ def handler(request):
                     "filing_type": ftype, "description": desc,
                 })
 
-    print(f"  {len(new_filings)} new filings found")
+    print(f"  {len(new_filings)} new filings")
 
     # Generate summaries
     for filing in new_filings:
@@ -184,25 +162,18 @@ def handler(request):
 
     # Send per-user alerts
     sent = 0
-    for chat_id, sub in db["subscribers"].items():
+    for chat_id in db["subscribers"]:
         companies = get_user_watched_companies(db, chat_id)
         user_summaries = [s for s in db["filing_summaries"]
                           if s["company_number"] in companies and s.get("summary_date") == today]
         if user_summaries:
             lines = ["📋 <b>Your Company Alerts</b>\n"]
-            by_company = {}
             for s in user_summaries:
-                if s["company_number"] not in by_company:
-                    by_company[s["company_number"]] = {"name": s["company_name"], "filings": []}
-                by_company[s["company_number"]]["filings"].append({"date": s["filing_date"], "summary": s["summary"]})
-            for num, data in by_company.items():
-                lines.append(f"🏢 <b>{data['name']}</b> ({num})")
-                for f in data["filings"]:
-                    lines.append(f"  {f['summary']}")
+                lines.append(f"🏢 <b>{s['company_name']}</b> ({s['company_number']})")
+                lines.append(f"  {s['summary']}")
                 lines.append("")
             send_telegram(chat_id, "\n".join(lines))
             sent += 1
-            time.sleep(0.1)
 
     print(f"  Alerts sent to {sent} users")
 
@@ -211,6 +182,5 @@ def handler(request):
     db["filing_summaries"] = [s for s in db["filing_summaries"] if s.get("summary_date", "") >= cutoff]
 
     save_db(db, sha)
-
-    print(f"\n{'='*60}\nDone.\n{'='*60}")
+    print("Done.")
     return {"statusCode": 200, "body": json.dumps({"filings": len(new_filings), "alerts_sent": sent})}

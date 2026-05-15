@@ -18,6 +18,21 @@ import base64
 from datetime import datetime, timedelta
 from pathlib import Path
 
+# ─── Stripe config ───
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
+# Price IDs from Stripe dashboard
+STRIPE_PRICE_PRO = os.environ.get("STRIPE_PRICE_PRO", "")
+STRIPE_PRICE_BUSINESS = os.environ.get("STRIPE_PRICE_BUSINESS", "")
+# Base URL for webhook callbacks
+UCW_BASE_URL = os.environ.get("UCW_BASE_URL", "https://uk-company-watch.vercel.app")
+
+PLAN_LIMITS = {
+    "free": {"max_watched": 1, "max_alerts_per_day": 3},
+    "pro": {"max_watched": 10, "max_alerts_per_day": 50},
+    "business": {"max_watched": 999, "max_alerts_per_day": 9999},
+}
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
@@ -35,7 +50,17 @@ def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.executescript("""
-        CREATE TABLE IF NOT EXISTS subscribers (chat_id TEXT PRIMARY KEY, plan TEXT DEFAULT 'free', joined_at TEXT DEFAULT CURRENT_TIMESTAMP, alerts_today INTEGER DEFAULT 0, last_alert_date TEXT, max_watched INTEGER DEFAULT 1, max_alerts_per_day INTEGER DEFAULT 3);
+        CREATE TABLE IF NOT EXISTS subscribers (
+            chat_id TEXT PRIMARY KEY,
+            plan TEXT DEFAULT 'free',
+            joined_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            stripe_customer_id TEXT,
+            stripe_subscription_id TEXT,
+            subscription_status TEXT,
+            current_period_end TEXT,
+            max_watched INTEGER DEFAULT 1,
+            max_alerts_per_day INTEGER DEFAULT 3
+        );
         CREATE TABLE IF NOT EXISTS watched_companies (id INTEGER PRIMARY KEY AUTOINCREMENT, chat_id TEXT NOT NULL, company_number TEXT NOT NULL, company_name TEXT, added_at TEXT DEFAULT CURRENT_TIMESTAMP, UNIQUE(chat_id, company_number));
         CREATE TABLE IF NOT EXISTS known_filings (id INTEGER PRIMARY KEY AUTOINCREMENT, company_number TEXT NOT NULL, filing_date TEXT NOT NULL, filing_type TEXT, description TEXT, first_seen TEXT DEFAULT CURRENT_TIMESTAMP, UNIQUE(company_number, filing_date, filing_type));
         CREATE TABLE IF NOT EXISTS known_companies (company_number TEXT PRIMARY KEY, company_name TEXT, status TEXT, date_of_creation TEXT, first_seen TEXT DEFAULT CURRENT_TIMESTAMP, alerted INTEGER DEFAULT 0);
@@ -220,6 +245,16 @@ def init_watchlists(conn):
     conn.commit()
 
 
+def get_total_watch_count(conn, chat_id):
+    """Get total watched items (individual + watchlists) for a user."""
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM watched_companies WHERE chat_id = ?", (str(chat_id),))
+    individual = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM watchlist_subscribers WHERE chat_id = ?", (str(chat_id),))
+    wl = c.fetchone()[0]
+    return individual + wl
+
+
 # ─── Core monitoring ───
 
 def get_all_watched_company_numbers(conn):
@@ -384,7 +419,121 @@ def process_telegram_commands(conn):
             alert = format_user_alert(summaries)
             send_telegram(chat_id, alert or f"No new filings today ({today}).")
         elif text == "/pricing":
-            send_telegram(chat_id, "📊 Pricing\n\n🆓 Free — £0/mo (1 watch, 3 alerts/day)\n⭐ Pro — £4.99/mo (10 watches, 50/day)\n🏢 Business — £19.99/mo (unlimited)\n\nPayPal: hermeswillmakesmoney@gmail.com")
+            send_telegram(chat_id,
+                "📊 <b>UK Company Watch Pricing</b>\n\n"
+                "🆓 <b>Free</b> — £0/month\n"
+                "  • 1 watch\n"
+                "  • 3 alerts/day\n\n"
+                "⭐ <b>Pro</b> — £4.99/month\n"
+                "  • 10 watches\n"
+                "  • 50 alerts/day\n"
+                "  • Priority filing alerts\n\n"
+                "🏢 <b>Business</b> — £19.99/month\n"
+                "  • Unlimited watches\n"
+                "  • Unlimited alerts\n"
+                "  • API access\n\n"
+                "Upgrade: /upgrade pro\n"
+                "Cancel: /cancel"
+            )
+        elif text.startswith("/upgrade "):
+            plan = text[9:].strip().lower()
+            if plan not in ("pro", "business"):
+                send_telegram(chat_id, "Usage: /upgrade pro or /upgrade business")
+                continue
+            if not STRIPE_SECRET_KEY:
+                send_telegram(chat_id, "Payment system not configured yet. Please try later.")
+                continue
+            price_id = STRIPE_PRICE_PRO if plan == "pro" else STRIPE_PRICE_BUSINESS
+            # Create Stripe checkout session
+            success_url = f"https://t.me/UK_Company_Watch_Bot?start=upgraded_{plan}"
+            cancel_url = f"https://t.me/UK_Company_Watch_Bot?start=cancel"
+            try:
+                data = urllib.parse.urlencode({
+                    "mode": "subscription",
+                    "line_items[0][price]": price_id,
+                    "line_items[0][quantity]": "1",
+                    "success_url": success_url,
+                    "cancel_url": cancel_url,
+                    "metadata[chat_id]": chat_id,
+                    "metadata[plan]": plan,
+                    "customer_email": "",
+                    "allow_promotion_codes": "true",
+                }).encode()
+                req = urllib.request.Request(
+                    "https://api.stripe.com/v1/checkout/sessions",
+                    data=data,
+                    headers={
+                        "Authorization": f"Bearer {STRIPE_SECRET_KEY}",
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                )
+                with urllib.request.urlopen(req, timeout=15) as resp:
+                    session = json.loads(resp.read().decode())
+                    checkout_url = session.get("url", "")
+                    if checkout_url:
+                        send_telegram(chat_id,
+                            f"💳 <b>Upgrade to {plan.capitalize()}</b>\n\n"
+                            f"Click below to complete your subscription:\n"
+                            f"{checkout_url}\n\n"
+                            f"After payment, your account will be upgraded automatically."
+                        )
+                    else:
+                        send_telegram(chat_id, "Error creating checkout session. Please try again.")
+            except Exception as e:
+                send_telegram(chat_id, f"Payment error: {e}")
+        elif text == "/cancel":
+            c.execute("SELECT stripe_subscription_id, plan FROM subscribers WHERE chat_id = ?", (chat_id,))
+            row = c.fetchone()
+            if not row or not row[0]:
+                send_telegram(chat_id, "You don't have an active subscription.")
+                continue
+            sub_id, current_plan = row
+            if current_plan == "free":
+                send_telegram(chat_id, "You're on the free plan already.")
+                continue
+            # Create Stripe billing portal session
+            try:
+                c.execute("SELECT stripe_customer_id FROM subscribers WHERE chat_id = ?", (chat_id,))
+                customer_row = c.fetchone()
+                customer_id = customer_row[0] if customer_row else ""
+                if customer_id:
+                    data = urllib.parse.urlencode({
+                        "customer": customer_id,
+                        "return_url": "https://t.me/UK_Company_Watch_Bot",
+                    }).encode()
+                    req = urllib.request.Request(
+                        "https://api.stripe.com/v1/billing_portal/sessions",
+                        data=data,
+                        headers={
+                            "Authorization": f"Bearer {STRIPE_SECRET_KEY}",
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                    )
+                    with urllib.request.urlopen(req, timeout=15) as resp:
+                        portal = json.loads(resp.read().decode())
+                        portal_url = portal.get("url", "")
+                        if portal_url:
+                            send_telegram(chat_id,
+                                "⚠️ <b>Cancel Subscription</b>\n\n"
+                                "Click below to manage your subscription:\n"
+                                f"{portal_url}\n\n"
+                                "You'll keep access until the end of your billing period."
+                            )
+                        else:
+                            send_telegram(chat_id, "Error creating portal session. Please contact support.")
+                else:
+                    send_telegram(chat_id, "No Stripe customer found. Contact support.")
+            except Exception as e:
+                send_telegram(chat_id, f"Error: {e}")
+        elif text.startswith("upgraded_"):
+            # User returned from successful checkout
+            plan = text.replace("upgraded_", "")
+            send_telegram(chat_id,
+                f"✅ <b>Welcome to {plan.capitalize()}!</b>\n\n"
+                f"Your subscription is now active. You have {PLAN_LIMITS[plan]['max_watched']} watches "
+                f"and {PLAN_LIMITs[plan]['max_alerts_per_day']} alerts/day.\n\n"
+                "Use /watchlists to join group watchlists or /watch [number] to watch individual companies."
+            )
         elif text.startswith("/search "):
             q = text[8:].strip()
             if len(q) < 2:
@@ -406,18 +555,45 @@ def process_telegram_commands(conn):
             else:
                 send_telegram(chat_id, f"Company {num} not found.")
         elif text.startswith("/watch "):
+            # Check plan limit
+            c.execute("SELECT plan FROM subscribers WHERE chat_id = ?", (chat_id,))
+            row = c.fetchone()
+            plan = row[0] if row else "free"
+            limits = PLAN_LIMITS.get(plan, PLAN_LIMITS["free"])
+            current = get_total_watch_count(conn, chat_id)
+            if current >= limits["max_watched"]:
+                send_telegram(chat_id,
+                    f"⚠️ Watch limit reached ({current}/{limits['max_watched']}).\n"
+                    f"Upgrade: /upgrade pro"
+                )
+                continue
             num = text[7:].strip()
             d = ch_fetch(f"/company/{num}")
             name = d.get("company_name", num) if d else num
             try:
                 c.execute("INSERT INTO watched_companies (chat_id, company_number, company_name) VALUES (?, ?, ?)", (chat_id, num, name))
                 conn.commit()
-                send_telegram(chat_id, f"✅ Watching <b>{name}</b> ({num})")
+                send_telegram(chat_id, f"✅ Watching <b>{name}</b> ({num}) ({current+1}/{limits['max_watched']} watches)")
             except sqlite3.IntegrityError:
                 send_telegram(chat_id, f"Already watching {name}.")
         elif text.startswith("/join "):
             code = text[6:].strip().lower()
             wl = WATCHLISTS.get(code)
+            if not wl:
+                send_telegram(chat_id, f"Watchlist '{code}' not found. Use /watchlists.")
+                continue
+            # Check plan limit
+            c.execute("SELECT plan FROM subscribers WHERE chat_id = ?", (chat_id,))
+            row = c.fetchone()
+            plan = row[0] if row else "free"
+            limits = PLAN_LIMITS.get(plan, PLAN_LIMITS["free"])
+            current = get_total_watch_count(conn, chat_id)
+            if current >= limits["max_watched"]:
+                send_telegram(chat_id,
+                    f"⚠️ Watch limit reached ({current}/{limits['max_watched']}).\n"
+                    f"Upgrade: /upgrade pro"
+                )
+                continue
             if not wl:
                 send_telegram(chat_id, f"Watchlist '{code}' not found. Use /watchlists.")
             else:

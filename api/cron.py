@@ -145,10 +145,10 @@ def handler(request):
         known_set.add(f"{f['company_number']}|{f['filing_date']}|{f.get('filing_type', '')}")
 
     for num in all_companies:
-        data = ch_fetch(f"/company/{num}/filing-history?items_per_page=3")
+        data = ch_fetch(f"/company/{num}/filing-history?items_per_page=1")
         if not data or "items" not in data:
             continue
-        for f in data["items"]:
+        for f in data["items"][:1]:
             fdate = f.get("date", "")
             ftype = f.get("type", "")
             desc = f.get("description", "")
@@ -164,7 +164,6 @@ def handler(request):
                     "company_number": num, "filing_date": fdate,
                     "filing_type": ftype, "description": desc,
                 })
-        time.sleep(0.5)
 
     print(f"  {len(new_filings)} new filings found")
 

@@ -1,8 +1,4 @@
-"""
-UK Company Watch — Telegram Bot Webhook Handler.
-Vercel serverless function at /api/bot.
-"""
-
+from flask import Flask, request, jsonify
 import json
 import os
 import urllib.request
@@ -17,6 +13,9 @@ STRIPE_PRICE_PRO = os.environ.get("STRIPE_PRICE_PRO", "price_1TXSqILyJWmpaKc9lnj
 STRIPE_PRICE_BUSINESS = os.environ.get("STRIPE_PRICE_BUSINESS", "price_1TXSr6LyJWmpaKc9xGV1iVtW")
 TELEGRAM_API = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}" if TELEGRAM_BOT_TOKEN else ""
 
+app = Flask(__name__)
+
+# Import shared DB layer
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from db import load_db, save_db, get_subscriber, get_total_watch_count, get_user_watched_companies, init_watchlists, PLAN_LIMITS, WATCHLISTS
@@ -277,22 +276,23 @@ def handle_command(db, chat_id, text):
     return None
 
 
-# Vercel Python serverless function entry point
-def handler(request):
+@app.route("/", methods=["GET", "POST"])
+@app.route("/api/bot", methods=["GET", "POST"])
+def bot_handler():
     if request.method == "GET":
-        return {"statusCode": 200, "body": "UK Company Watch Bot — OK"}
+        return "UK Company Watch Bot — OK"
 
     try:
-        body = json.loads(request.body)
+        body = request.get_json(force=True)
     except Exception:
-        return {"statusCode": 400, "body": "Bad request"}
+        return "Bad request", 400
 
     message = body.get("message", {})
     chat_id = str(message.get("chat", {}).get("id", ""))
     text = message.get("text", "").strip()
 
     if not text or not chat_id:
-        return {"statusCode": 200, "body": "ok"}
+        return "ok", 200
 
     db, sha = load_db()
     result = handle_command(db, chat_id, text)
@@ -300,4 +300,4 @@ def handler(request):
     if result:
         send_telegram(chat_id, result)
 
-    return {"statusCode": 200, "body": "ok"}
+    return "ok", 200

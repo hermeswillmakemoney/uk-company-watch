@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "buildCommand": "pip install -r requirements.txt",
   "builds": [
     { "src": "api/bot.py", "use": "@vercel/python" },
     { "src": "api/cron.py", "use": "@vercel/python" }

@@ -100,6 +100,54 @@ def ch_fetch(path):
         return None
 
 
+def get_company_details(db, num):
+    """Fetch and cache company details from Companies House."""
+    if num in db.get("known_companies") and "status" in db["known_companies"][num]:
+        return db["known_companies"][num]
+    data = ch_fetch(f"/company/{num}")
+    if data:
+        db["known_companies"][num] = {
+            "name": data.get("company_name", num),
+            "status": data.get("company_status", ""),
+            "type": data.get("type", ""),
+            "incorporated": data.get("date_of_creation", ""),
+            "sic_codes": data.get("sic_codes", []),
+            "address": data.get("registered_office_address", {}).get("address_line_1", ""),
+        }
+        return db["known_companies"][num]
+    return {"name": num, "status": "", "type": "", "incorporated": "", "sic_codes": [], "address": ""}
+
+
+def format_alert_line(filing, company_details):
+    """Format a single filing alert line with company context."""
+    summary = generate_summary(
+        filing["company_name"], filing["company_number"],
+        filing["filing_date"], filing["filing_type"], filing["description"]
+    )
+    parts = [summary]
+
+    # Add company age context
+    if company_details.get("incorporated"):
+        try:
+            inc_year = int(company_details["incorporated"][:4])
+            age = datetime.utcnow().year - inc_year
+            parts.append(f"Age: {age}y")
+        except (ValueError, IndexError):
+            pass
+
+    # Add status if not active
+    status = company_details.get("status", "")
+    if status and status != "active":
+        parts.append(f"Status: {status}")
+
+    # Add SIC code description (first one)
+    sic = company_details.get("sic_codes", [])
+    if sic:
+        parts.append(f"Sector: {sic[0]}")
+
+    return " | ".join(parts)
+
+
 def handler(request):
     print(f"UCW Cron — {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}")
 
@@ -118,7 +166,7 @@ def handler(request):
 
     print(f"  {len(all_companies)} companies to check")
 
-    # Check filings (only most recent per company to stay within timeout)
+    # Check filings
     new_filings = []
     today = datetime.utcnow().strftime("%Y-%m-%d")
     known_set = set()
@@ -148,12 +196,11 @@ def handler(request):
 
     print(f"  {len(new_filings)} new filings")
 
-    # Generate summaries
+    # Fetch company details for new filings and generate summaries
     for filing in new_filings:
-        summary = generate_summary(
-            filing["company_name"], filing["company_number"],
-            filing["filing_date"], filing["filing_type"], filing["description"]
-        )
+        details = get_company_details(db, filing["company_number"])
+        filing["company_details"] = details
+        summary = format_alert_line(filing, details)
         db["filing_summaries"].append({
             "company_number": filing["company_number"],
             "company_name": filing["company_name"],
@@ -193,4 +240,3 @@ def handler(request):
 @app.route("/api/cron", methods=["GET", "POST"])
 def cron_handler():
     return handler(None)
-

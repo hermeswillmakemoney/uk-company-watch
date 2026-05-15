@@ -1,14 +1,6 @@
 {
   "version": 2,
   "framework": null,
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.py" },
-    { "src": "/(.*)", "dest": "/public/$1" }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron",
-      "schedule": "0 8 * * *"
-    }
-  ]
+  "buildCommand": "",
+  "outputDirectory": "public"
 }

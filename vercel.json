@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "framework": null,
+  "routes": [
+    { "src": "/api/webhook", "dest": "/api/webhook.py" },
+    { "src": "/api/cron", "dest": "/api/cron.py" }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 * * * *"
+    }
+  ]
+}

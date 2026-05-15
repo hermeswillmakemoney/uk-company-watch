@@ -1,0 +1,2 @@
+# UK Company Watch — Python dependencies
+# (All stdlib, but Vercel needs this file)

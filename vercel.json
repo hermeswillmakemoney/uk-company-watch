@@ -1,5 +1,18 @@
 {
   "version": 2,
-  "framework": null,
-  "outputDirectory": "public"
+  "builds": [
+    { "src": "api/bot.py", "use": "@vercel/python" },
+    { "src": "api/cron.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/api/bot", "dest": "api/bot.py" },
+    { "src": "/api/cron", "dest": "api/cron.py" },
+    { "src": "/(.*)", "dest": "public/$1" }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 * * * *"
+    }
+  ]
 }

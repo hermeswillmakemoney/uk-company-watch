@@ -1,0 +1,26 @@
+{
+  "subscribers": {
+    "8638657311": {
+      "plan": "business",
+      "joined_at": "2026-05-15T19:41:59",
+      "max_watched": 999,
+      "max_alerts_per_week": 9999,
+      "stripe_subscription_id": null,
+      "stripe_customer_id": null,
+      "subscription_status": "active"
+    }
+  },
+  "watched_companies": {},
+  "known_companies": {},
+  "watchlists": {},
+  "watchlist_subscribers": {
+    "fintech": ["8638657311"],
+    "crypto": ["8638657311"],
+    "ai": ["8638657311"],
+    "property": ["8638657311"],
+    "retail": ["8638657311"],
+    "insurtech": ["8638657311"]
+  },
+  "filing_summaries": [],
+  "known_filings": []
+}

@@ -303,7 +303,214 @@ def get_updates(offset=None):
         return []
 
 
-# ─── Command Handlers ───
+# ─── LLM Digest ───
+
+DIGEST_SYSTEM_PROMPT = """You are the digest writer for UK Company Watch, a service that monitors UK company filings and sends daily summaries to subscribers.
+
+Your job: Take raw Companies House filing data from the past 24 hours and write a concise, informative daily digest that a business professional would actually want to read.
+
+RULES:
+- Write in a professional but conversational tone — like a smart colleague summarizing the day's news
+- Lead with the most important/interesting items (insolvencies first, then significant filings)
+- Group related items by sector or theme where possible
+- For insolvencies: always mention the company name and what they do (infer from name/SIC if needed)
+- For filings: highlight anything unusual (director changes, large charges, confirmation statement overdues)
+- Keep it scannable — use bullet points, bold company names
+- If there's nothing notable, say so briefly — don't pad
+- End with a one-line summary count
+- Keep the whole digest under 800 words
+- Use HTML formatting compatible with Telegram: <b>bold</b>, <i>italic</i>, <code>code</a>
+
+FORMAT:
+📊 UK Company Watch — Daily Digest
+📅 [Date]
+
+[Body — organized by importance]
+
+📊 Summary: X insolvencies, Y new filings, Z director changes"""
+
+
+def collect_daily_data(conn):
+    """Collect all filing data from the past 24 hours."""
+    c = conn.cursor()
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+
+    # New insolvencies
+    c.execute("""
+        SELECT company_number, company_name, date_of_creation 
+        FROM known_companies 
+        WHERE status='insolvency' AND date(first_seen) = ?
+        ORDER BY company_name
+    """, (today,))
+    insolvencies = c.fetchall()
+
+    # New filings with descriptions
+    c.execute("""
+        SELECT company_number, filing_date, filing_type, description
+        FROM known_filings 
+        WHERE date(first_seen) = ?
+        ORDER BY filing_date DESC
+        LIMIT 50
+    """, (today,))
+    filings = c.fetchall()
+
+    # New companies incorporated
+    c.execute("""
+        SELECT company_number, company_name, status
+        FROM known_companies 
+        WHERE date(first_seen) = ? AND status != 'insolvency'
+        ORDER BY company_name
+        LIMIT 30
+    """, (today,))
+    new_companies = c.fetchall()
+
+    # Get company names for filings (join with known_companies)
+    c.execute("""
+        SELECT kf.company_number, kf.filing_date, kf.filing_type, kf.description, kc.company_name
+        FROM known_filings kf
+        LEFT JOIN known_companies kc ON kf.company_number = kc.company_number
+        WHERE date(kf.first_seen) = ?
+        ORDER BY kf.filing_date DESC
+        LIMIT 50
+    """, (today,))
+    filings_with_names = c.fetchall()
+
+    return {
+        "insolvencies": insolvencies,
+        "filings": filings_with_names,
+        "new_companies": new_companies,
+        "date": today,
+    }
+
+
+def build_digest_prompt(data):
+    """Build the user prompt for the LLM digest."""
+    date_str = datetime.utcnow().strftime("%d %B %Y")
+
+    lines = [f"Write today's UK Company Watch digest for {date_str}."]
+    lines.append("")
+
+    if data["insolvencies"]:
+        lines.append("NEW INSOLVENCIES:")
+        for num, name, created in data["insolvencies"]:
+            lines.append(f"  - {name} (Company #{num}, incorporated {created or 'unknown'})")
+        lines.append("")
+
+    if data["filings"]:
+        lines.append("NEW FILINGS:")
+        for num, fdate, ftype, desc, cname in data["filings"][:30]:
+            company = cname or num
+            lines.append(f"  - {company} ({num}): {ftype} on {fdate} — {desc or 'No description'}")
+        lines.append("")
+
+    if data["new_companies"]:
+        lines.append(f"NEW COMPANIES INCORPORATED: {len(data['new_companies'])}")
+        for num, name, status in data["new_companies"][:10]:
+            lines.append(f"  - {name} ({num}) — {status}")
+        if len(data["new_companies"]) > 10:
+            lines.append(f"  ... and {len(data['new_companies']) - 10} more")
+        lines.append("")
+
+    if not data["insolvencies"] and not data["filings"] and not data["new_companies"]:
+        lines.append("No significant activity detected today.")
+
+    lines.append("Write the digest now.")
+    return "\n".join(lines)
+
+
+def call_llm(system_prompt, user_prompt):
+    """Call the LLM API to generate the digest."""
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    if not api_key:
+        # Try alternative: use the Hermes gateway if available
+        return None
+
+    data = json.dumps({
+        "model": "gpt-4o-mini",
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        "max_tokens": 1000,
+        "temperature": 0.7,
+    }).encode()
+
+    req = urllib.request.Request(
+        "https://api.openai.com/v1/chat/completions",
+        data=data,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            result = json.loads(resp.read().decode())
+            return result["choices"][0]["message"]["content"]
+    except Exception as e:
+        print(f"LLM API error: {e}")
+        return None
+
+
+def send_daily_digest(conn):
+    """Generate and send the daily digest to all subscribers."""
+    data = collect_daily_data(conn)
+
+    # Try LLM first
+    prompt = build_digest_prompt(data)
+    digest = call_llm(DIGEST_SYSTEM_PROMPT, prompt)
+
+    if not digest:
+        # Fallback: generate a simple digest without LLM
+        digest = generate_simple_digest(data)
+
+    # Send to all subscribers
+    c = conn.cursor()
+    c.execute("SELECT chat_id FROM subscribers")
+    subscribers = [row[0] for row in c.fetchall()]
+
+    for chat_id in subscribers:
+        send_telegram(chat_id, digest)
+        time.sleep(0.1)
+
+    print(f"  Sent daily digest to {len(subscribers)} subscribers")
+    return digest
+
+
+def generate_simple_digest(data):
+    """Generate a simple digest without LLM (fallback)."""
+    date_str = datetime.utcnow().strftime("%d %B %Y")
+    lines = [
+        f"📊 <b>UK Company Watch — Daily Digest</b>\n",
+        f"📅 {date_str}\n",
+    ]
+
+    if data["insolvencies"]:
+        lines.append("⚠️ <b>Insolvencies</b>")
+        for num, name, _ in data["insolvencies"]:
+            lines.append(f"• <b>{name}</b> ({num})")
+        lines.append("")
+
+    if data["filings"]:
+        lines.append("📋 <b>Notable Filings</b>")
+        for num, fdate, ftype, desc, cname in data["filings"][:10]:
+            company = cname or num
+            lines.append(f"• <b>{company}</b> — {ftype} ({fdate})")
+        if len(data["filings"]) > 10:
+            lines.append(f"  ... and {len(data['filings']) - 10} more filings")
+        lines.append("")
+
+    if data["new_companies"]:
+        lines.append(f"🏢 <b>New Companies:</b> {len(data['new_companies'])} incorporated today")
+        lines.append("")
+
+    total_ins = len(data["insolvencies"])
+    total_fil = len(data["filings"])
+    total_new = len(data["new_companies"])
+    lines.append(f"📊 Summary: {total_ins} insolvencies, {total_fil} filings, {total_new} new companies")
+
+    return "\n".join(lines)
 
 def handle_start(chat_id):
     send_telegram(chat_id,
@@ -482,23 +689,13 @@ def handle_leave(chat_id, code, conn):
 
 
 def handle_digest(chat_id, conn):
-    c = conn.cursor()
-    today = datetime.utcnow().strftime("%Y-%m-%d")
-    c.execute("SELECT COUNT(*) FROM known_companies WHERE date(first_seen) = ?", (today,))
-    new_today = c.fetchone()[0]
-    c.execute("SELECT COUNT(*) FROM known_companies WHERE status='insolvency' AND date(first_seen) = ?", (today,))
-    ins_today = c.fetchone()[0]
-    c.execute("SELECT COUNT(*) FROM known_filings WHERE date(first_seen) = ?", (today,))
-    fil_today = c.fetchone()[0]
-
-    send_telegram(chat_id,
-        f"📊 <b>UK Company Watch — Daily Digest</b>\n"
-        f"📅 {datetime.utcnow().strftime('%d %B %Y')}\n\n"
-        f"🏢 New companies tracked: <b>{new_today}</b>\n"
-        f"⚠️ Insolvencies: <b>{ins_today}</b>\n"
-        f"📋 New filings: <b>{fil_today}</b>\n\n"
-        f"Reply /help for commands."
-    )
+    """Send the daily digest (LLM-powered or fallback)."""
+    data = collect_daily_data(conn)
+    prompt = build_digest_prompt(data)
+    digest = call_llm(DIGEST_SYSTEM_PROMPT, prompt)
+    if not digest:
+        digest = generate_simple_digest(data)
+    send_telegram(chat_id, digest)
 
 
 def handle_pricing(chat_id):
@@ -796,5 +993,24 @@ def main():
     conn.close()
 
 
+def run_daily_digest():
+    """Run the daily digest only (separate cron job)."""
+    print(f"\n{'='*60}")
+    print(f"UK Company Watch — Daily Digest — {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+    print(f"{'='*60}")
+
+    if not TELEGRAM_BOT_TOKEN:
+        print("WARNING: No TELEGRAM_BOT_TOKEN set.")
+
+    conn = init_db()
+    init_watchlists(conn)
+    send_daily_digest(conn)
+    conn.close()
+    print("Daily digest complete.\n")
+
+
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == "--digest":
+        run_daily_digest()
+    else:
+        main()

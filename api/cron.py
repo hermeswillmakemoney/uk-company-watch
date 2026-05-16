@@ -22,33 +22,33 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from db import load_db, save_db, get_user_watched_companies, init_watchlists
 
 FILING_TYPE_MAP = {
-    "AA01": ("Annual return", "routine", "Company confirmed its details are up to date."),
-    "AR01": ("Annual return", "routine", "Company filed its annual return."),
-    "CH01": ("Director appointed", "notable", "A new director was appointed to the board."),
-    "CH02": ("Director resigned", "concerning", "A director resigned from the board."),
-    "CH03": ("Director details changed", "routine", "A director's details were updated."),
-    "CS01": ("Confirmation statement", "routine", "Company filed its confirmation statement."),
-    "AD01": ("Address changed", "notable", "Company changed its registered address."),
-    "SH01": ("Shares allotted", "notable", "Company issued new shares."),
-    "SH06": ("Shares allotted", "notable", "Company allotted new shares."),
-    "MG01": ("Mortgage/charge", "concerning", "Company registered a mortgage or charge."),
-    "LIQ01": ("Liquidation", "critical", "Company entered liquidation."),
-    "WUO1": ("Winding up", "critical", "Company is being wound up."),
-    "DS01": ("Dissolution", "concerning", "Company applied for dissolution."),
-    "GAZ1": ("Gazette notice", "notable", "Gazette notice published."),
-    "GAZ2": ("Gazette notice", "notable", "Gazette notice published."),
-    "TM01": ("Termination", "notable", "A director or officer's appointment was terminated."),
-    "TM02": ("Termination", "notable", "A director or officer's appointment was terminated."),
-    "AP01": ("Director appointed", "notable", "A new director was appointed."),
-    "AP04": ("Director appointed", "notable", "A new director was appointed."),
-    "NEWINC": ("Incorporation", "routine", "New company incorporated."),
-    "CERTNM": ("Name change", "notable", "Company changed its name."),
-    "MR01": ("Mortgage registered", "concerning", "A mortgage was registered against the company."),
-    "MR04": ("Mortgage satisfied", "routine", "A mortgage was satisfied/released."),
-    "PSC01": ("PSC update", "notable", "Person with Significant Control information updated."),
-    "PSC02": ("PSC update", "notable", "PSC information changed."),
-    "RP01": ("Share buyback", "notable", "Company purchased its own shares."),
-    "RR02": ("Re-registration", "notable", "Company re-registered."),
+    "AA01": ("Annual return", "routine", "Annual compliance check-in. Nothing unusual."),
+    "AR01": ("Annual return", "routine", "Annual compliance check-in. Nothing unusual."),
+    "CH01": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
+    "CH02": ("Director resigned", "concerning", "Board member left. Watch for follow-up resignations or instability."),
+    "CH03": ("Director details changed", "routine", "Minor admin update to a director's recorded details."),
+    "CS01": ("Confirmation statement", "routine", "Annual compliance filing. Confirms company details are current."),
+    "AD01": ("Address changed", "notable", "Registered office moved. Could be growth, cost-cutting, or red flag if moving to a PO box."),
+    "SH01": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH06": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "MG01": ("Mortgage/charge", "concerning", "Secured debt registered. Company has borrowed against assets."),
+    "LIQ01": ("Liquidation", "critical", "Company is being wound up. Creditors should act immediately."),
+    "WUO1": ("Winding up", "critical", "Company is being wound up. Creditors should act immediately."),
+    "DS01": ("Dissolution", "concerning", "Company applied to be struck off. Could be dormant or closing down."),
+    "GAZ1": ("Gazette notice", "notable", "Published in the London Gazette — often relates to insolvency or strike-off proceedings."),
+    "GAZ2": ("Gazette notice", "notable", "Published in the London Gazette — often relates to insolvency or strike-off proceedings."),
+    "TM01": ("Appointment terminated", "notable", "A director or officer's appointment was formally ended."),
+    "TM02": ("Appointment terminated", "notable", "A director or officer's appointment was formally ended."),
+    "AP01": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
+    "AP04": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
+    "NEWINC": ("Incorporation", "routine", "New company registered."),
+    "CERTNM": ("Name change", "notable", "Company changed its name — could signal rebrand, pivot, or acquisition."),
+    "MR01": ("Mortgage registered", "concerning", "A mortgage or charge registered against company assets."),
+    "MR04": ("Mortgage satisfied", "routine", "A previous mortgage/charge has been paid off and released."),
+    "PSC01": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    "PSC02": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    "RP01": ("Share buyback", "notable", "Company bought back its own shares — could signal confidence or insider activity."),
+    "RR02": ("Re-registration", "notable", "Company changed its legal structure (e.g. private to public)."),
 }
 
 
@@ -100,54 +100,6 @@ def ch_fetch(path):
         return None
 
 
-def get_company_details(db, num):
-    """Fetch and cache company details from Companies House."""
-    if num in db.get("known_companies") and "status" in db["known_companies"][num]:
-        return db["known_companies"][num]
-    data = ch_fetch(f"/company/{num}")
-    if data:
-        db["known_companies"][num] = {
-            "name": data.get("company_name", num),
-            "status": data.get("company_status", ""),
-            "type": data.get("type", ""),
-            "incorporated": data.get("date_of_creation", ""),
-            "sic_codes": data.get("sic_codes", []),
-            "address": data.get("registered_office_address", {}).get("address_line_1", ""),
-        }
-        return db["known_companies"][num]
-    return {"name": num, "status": "", "type": "", "incorporated": "", "sic_codes": [], "address": ""}
-
-
-def format_alert_line(filing, company_details):
-    """Format a single filing alert line with company context."""
-    summary = generate_summary(
-        filing["company_name"], filing["company_number"],
-        filing["filing_date"], filing["filing_type"], filing["description"]
-    )
-    parts = [summary]
-
-    # Add company age context
-    if company_details.get("incorporated"):
-        try:
-            inc_year = int(company_details["incorporated"][:4])
-            age = datetime.utcnow().year - inc_year
-            parts.append(f"Age: {age}y")
-        except (ValueError, IndexError):
-            pass
-
-    # Add status if not active
-    status = company_details.get("status", "")
-    if status and status != "active":
-        parts.append(f"Status: {status}")
-
-    # Add SIC code description (first one)
-    sic = company_details.get("sic_codes", [])
-    if sic:
-        parts.append(f"Sector: {sic[0]}")
-
-    return " | ".join(parts)
-
-
 def handler(request):
     print(f"UCW Cron — {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}")
 
@@ -196,11 +148,12 @@ def handler(request):
 
     print(f"  {len(new_filings)} new filings")
 
-    # Fetch company details for new filings and generate summaries
+    # Generate summaries
     for filing in new_filings:
-        details = get_company_details(db, filing["company_number"])
-        filing["company_details"] = details
-        summary = format_alert_line(filing, details)
+        summary = generate_summary(
+            filing["company_name"], filing["company_number"],
+            filing["filing_date"], filing["filing_type"], filing["description"]
+        )
         db["filing_summaries"].append({
             "company_number": filing["company_number"],
             "company_name": filing["company_name"],

@@ -273,6 +273,23 @@ def handle_command(db, chat_id, text):
         save_db(db, "")
         return "✅ Your subscription has been cancelled. You're now on the Free plan."
 
+    if text == "/status":
+        plan = sub["plan"]
+        max_watched = sub.get("max_watched", 1)
+        max_alerts = sub.get("max_alerts_per_week", 3)
+        alerts_sent = sub.get("alerts_sent_this_week", 0)
+        remaining = max_alerts - alerts_sent
+        watches = get_total_watch_count(db, chat_id)
+        reset_date = (datetime.utcnow() + timedelta(days=7 - datetime.utcnow().weekday())).strftime("%Y-%m-%d")
+        return (
+            f"📊 <b>Your Account</b>\n\n"
+            f"Plan: <b>{plan.capitalize()}</b>\n"
+            f"Watches: {watches}/{max_watched}\n"
+            f"Alerts this week: {alerts_sent}/{max_alerts} ({remaining} remaining)\n"
+            f"Resets: {reset_date} (Monday)\n\n"
+            f"Upgrade: /upgrade pro"
+        )
+
     return None
 
 

@@ -131,6 +131,9 @@ def get_subscriber(db, chat_id):
             "stripe_subscription_id": None,
             "stripe_customer_id": None,
             "subscription_status": None,
+            "alerts_sent_this_week": 0,
+            "alert_week_start": "",
+            "limit_warning_sent_date": "",
         }
     return db["subscribers"][chat_id]
 

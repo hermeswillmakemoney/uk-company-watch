@@ -166,17 +166,65 @@ def handler(request):
     # Send per-user alerts
     sent = 0
     for chat_id in db["subscribers"]:
+        sub = db["subscribers"][chat_id]
         companies = get_user_watched_companies(db, chat_id)
         user_summaries = [s for s in db["filing_summaries"]
                           if s["company_number"] in companies and s.get("summary_date") == today]
-        if user_summaries:
-            lines = ["📋 <b>Your Company Alerts</b>\n"]
-            for s in user_summaries:
-                lines.append(f"🏢 <b>{s['company_name']}</b> ({s['company_number']})")
-                lines.append(f"  {s['summary']}")
-                lines.append("")
-            send_telegram(chat_id, "\n".join(lines))
-            sent += 1
+
+        if not user_summaries:
+            continue
+
+        # Check weekly alert limit
+        max_alerts = sub.get("max_alerts_per_week", 3)
+        alerts_sent_this_week = sub.get("alerts_sent_this_week", 0)
+        week_start = sub.get("alert_week_start", "")
+
+        # Reset counter on new week (Monday)
+        today_date = datetime.utcnow().strftime("%Y-%m-%d")
+        current_week_start = (datetime.utcnow() - timedelta(days=datetime.utcnow().weekday())).strftime("%Y-%m-%d")
+        if week_start != current_week_start:
+            alerts_sent_this_week = 0
+            sub["alert_week_start"] = current_week_start
+            sub["alerts_sent_this_week"] = 0
+
+        # Calculate remaining
+        remaining = max_alerts - alerts_sent_this_week
+
+        if remaining <= 0:
+            # Limit hit — send warning if not already sent today
+            if sub.get("limit_warning_sent_date") != today_date:
+                reset_date = (datetime.utcnow() + timedelta(days=7 - datetime.utcnow().weekday())).strftime("%Y-%m-%d")
+                send_telegram(chat_id,
+                    f"⚠️ <b>Weekly alert limit reached</b>\n\n"
+                    f"You've hit your limit of {max_alerts} alerts this week.\n"
+                    f"Your counter resets on {reset_date} (Monday).\n\n"
+                    f"Upgrade to /upgrade pro for 50 alerts/week, or /upgrade business for unlimited."
+                )
+                sub["limit_warning_sent_date"] = today_date
+            continue
+
+        # Send the alert
+        lines = ["📋 <b>Your Company Alerts</b>\n"]
+        for s in user_summaries:
+            lines.append(f"🏢 <b>{s['company_name']}</b> ({s['company_number']})")
+            lines.append(f"  {s['summary']}")
+            lines.append("")
+        send_telegram(chat_id, "\n".join(lines))
+
+        # Update counter
+        alerts_sent_this_week += 1
+        sub["alerts_sent_this_week"] = alerts_sent_this_week
+        sent += 1
+
+        # If this was the last alert before limit, tell them
+        if alerts_sent_this_week >= max_alerts:
+            reset_date = (datetime.utcnow() + timedelta(days=7 - datetime.utcnow().weekday())).strftime("%Y-%m-%d")
+            send_telegram(chat_id,
+                f"⚠️ <b>Alert limit reached</b>\n\n"
+                f"That was your last alert this week ({max_alerts}/{max_alerts}).\n"
+                f"Counter resets on {reset_date} (Monday).\n\n"
+                f"Upgrade: /upgrade pro"
+            )
 
     print(f"  Alerts sent to {sent} users")
 

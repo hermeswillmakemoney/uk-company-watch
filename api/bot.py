@@ -4,7 +4,7 @@ import os
 import urllib.request
 import urllib.parse
 import base64
-from datetime import datetime
+from datetime import datetime, timedelta
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 CH_API_KEY = os.environ.get("CH_API_KEY", "")
@@ -21,16 +21,19 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from db import load_db, save_db, get_subscriber, get_total_watch_count, get_user_watched_companies, init_watchlists, PLAN_LIMITS, WATCHLISTS
 
 
-def send_telegram(chat_id, text):
+def send_telegram(chat_id, text, reply_markup=None):
     if not TELEGRAM_BOT_TOKEN:
         return False
-    data = urllib.parse.urlencode({
+    data = {
         "chat_id": str(chat_id),
         "text": text,
         "parse_mode": "HTML",
-    }).encode()
+    }
+    if reply_markup:
+        data["reply_markup"] = json.dumps(reply_markup)
+    encoded = urllib.parse.urlencode(data).encode()
     try:
-        req = urllib.request.Request(f"{TELEGRAM_API}/sendMessage", data=data)
+        req = urllib.request.Request(f"{TELEGRAM_API}/sendMessage", data=encoded)
         with urllib.request.urlopen(req, timeout=15) as resp:
             return json.loads(resp.read().decode()).get("ok", False)
     except Exception as e:
@@ -99,22 +102,14 @@ def handle_command(db, chat_id, text):
         )
 
     if text == "/start":
-        return (
-            "Welcome to UK Company Watch! 🇬🇧\n\n"
-            "Commands:\n"
-            "/search [name] — Search companies\n"
-            "/company [number] — Company details\n"
-            "/watch [number] — Watch a company\n"
-            "/watching — Your watches\n"
-            "/watchlists — Group watchlists\n"
-            "/join [code] — Join a watchlist\n"
-            "/leave [code] — Leave a watchlist\n"
-            "/digest — Today's filings\n"
-            "/pricing — View plans\n"
-            "/upgrade — Upgrade plan\n"
-            "/cancel — Cancel subscription\n\n"
-            "Free: 1 watch, 3 alerts/week"
-        )
+        miniapp_url = "https://uk-company-watch.vercel.app/miniapp"
+        reply_markup = {
+            "inline_keyboard": [[
+                {"text": "📊 Open Dashboard", "web_app": {"url": miniapp_url}}
+            ]]
+        }
+        send_telegram(chat_id, "Welcome to UK Company Watch! 🇬🇧\n\nTap below to open your dashboard, or use commands:\n\n/search [name] — Search companies\n/company [number] — Company details\n/watch [number] — Watch a company\n/watching — Your watches\n/watchlists — Group watchlists\n/join [code] — Join a watchlist\n/leave [code] — Leave a watchlist\n/digest — Today's filings\n/pricing — View plans\n/upgrade — Upgrade plan\n/cancel — Cancel subscription\n\nFree: 1 watch, 3 alerts/week", reply_markup=reply_markup)
+        return ""
 
     if text == "/help":
         return (
@@ -293,9 +288,200 @@ def handle_command(db, chat_id, text):
     return None
 
 
-@app.route("/", methods=["GET", "POST"])
-@app.route("/api/bot", methods=["GET", "POST"])
-def bot_handler():
+def get_user_id_from_request():
+    """Extract user ID from Telegram Mini App init data header."""
+    init_data = request.headers.get('X-Telegram-Init-Data', '')
+    if init_data:
+        try:
+            parsed = dict(urllib.parse.parse_qsl(init_data))
+            user_json = parsed.get('user', '')
+            if user_json:
+                user_data = json.loads(user_json)
+                return str(user_data.get('id', ''))
+        except Exception:
+            pass
+    return None
+
+
+# ===== Mini App API Endpoints =====
+
+@app.route("/api/user", methods=["GET"])
+def api_user():
+    chat_id = get_user_id_from_request()
+    if not chat_id:
+        return jsonify({"error": "unauthorized"}), 401
+    db, _ = load_db()
+    init_watchlists(db)
+    sub = get_subscriber(db, chat_id)
+    watch_count = get_total_watch_count(db, chat_id)
+    watches = []
+    for num in db.get("watched_companies", {}).get(chat_id, []):
+        name = db.get("known_companies", {}).get(num, {}).get("name", num)
+        watches.append({"number": num, "name": name})
+    watchlists = []
+    for code, members in db.get("watchlist_subscribers", {}).items():
+        if chat_id in members and code in db.get("watchlists", {}):
+            wl = db["watchlists"][code]
+            watchlists.append({
+                "code": code,
+                "name": wl.get("name", code),
+                "icon": wl.get("icon", "📋"),
+                "count": len(wl.get("companies", [])),
+            })
+    return jsonify({
+        "plan": sub.get("plan", "free"),
+        "max_watched": sub.get("max_watched", 1),
+        "max_alerts_per_week": sub.get("max_alerts_per_week", 3),
+        "alerts_sent_this_week": sub.get("alerts_sent_this_week", 0),
+        "watch_count": watch_count,
+        "watches": watches,
+        "watchlists": watchlists,
+    })
+
+
+@app.route("/api/filings", methods=["GET"])
+def api_filings():
+    chat_id = get_user_id_from_request()
+    if not chat_id:
+        return jsonify({"error": "unauthorized"}), 401
+    db, _ = load_db()
+    companies = get_user_watched_companies(db, chat_id)
+    days = int(request.args.get("days", 7))
+    cutoff = (datetime.utcnow() - timedelta(days=days)).strftime("%Y-%m-%d")
+    summaries = [
+        {
+            "company_number": s["company_number"],
+            "company_name": s["company_name"],
+            "filing_date": s.get("filing_date", ""),
+            "filing_type": s.get("filing_type", ""),
+            "summary": s.get("summary", ""),
+            "severity": s.get("severity", "routine"),
+        }
+        for s in db.get("filing_summaries", [])
+        if s["company_number"] in companies and s.get("summary_date", "") >= cutoff
+    ]
+    summaries.sort(key=lambda x: x.get("filing_date", ""), reverse=True)
+    return jsonify(summaries)
+
+
+@app.route("/api/search", methods=["GET"])
+def api_search():
+    q = request.args.get("q", "").strip()
+    if len(q) < 2:
+        return jsonify({"items": []})
+    data = ch_fetch(f"/search/companies?q={urllib.parse.quote(q)}&items_per_page=5")
+    if not data or not data.get("items"):
+        return jsonify({"items": []})
+    items = []
+    for item in data["items"][:5]:
+        items.append({
+            "company_number": item.get("company_number", ""),
+            "company_name": item.get("title", ""),
+            "company_status": item.get("company_status", ""),
+            "sic_codes": [],
+            "address": item.get("address_snippet", ""),
+        })
+    return jsonify({"items": items})
+
+
+@app.route("/api/watch", methods=["POST"])
+def api_watch():
+    chat_id = get_user_id_from_request()
+    if not chat_id:
+        return jsonify({"error": "unauthorized"}), 401
+    body = request.get_json(force=True) or {}
+    company_number = body.get("company_number", "").strip()
+    if not company_number:
+        return jsonify({"error": "missing company_number"}), 400
+    db, sha = load_db()
+    init_watchlists(db)
+    sub = get_subscriber(db, chat_id)
+    limits = PLAN_LIMITS.get(sub["plan"], PLAN_LIMITS["free"])
+    current = get_total_watch_count(db, chat_id)
+    if current >= limits["max_watched"]:
+        return jsonify({"error": "limit_reached", "max": limits["max_watched"]}), 403
+    d = ch_fetch(f"/company/{company_number}")
+    name = d.get("company_name", company_number) if d else company_number
+    if chat_id not in db["watched_companies"]:
+        db["watched_companies"][chat_id] = []
+    if company_number not in db["watched_companies"][chat_id]:
+        db["watched_companies"][chat_id].append(company_number)
+        db["known_companies"][company_number] = {"name": name}
+        save_db(db, sha)
+    return jsonify({"ok": True, "watch_count": get_total_watch_count(db, chat_id)})
+
+
+@app.route("/api/unwatch", methods=["POST"])
+def api_unwatch():
+    chat_id = get_user_id_from_request()
+    if not chat_id:
+        return jsonify({"error": "unauthorized"}), 401
+    body = request.get_json(force=True) or {}
+    company_number = body.get("company_number", "").strip()
+    if not company_number:
+        return jsonify({"error": "missing company_number"}), 400
+    db, sha = load_db()
+    if chat_id in db.get("watched_companies", {}) and company_number in db["watched_companies"][chat_id]:
+        db["watched_companies"][chat_id].remove(company_number)
+        save_db(db, sha)
+    return jsonify({"ok": True, "watch_count": get_total_watch_count(db, chat_id)})
+
+
+@app.route("/api/join", methods=["POST"])
+def api_join():
+    chat_id = get_user_id_from_request()
+    if not chat_id:
+        return jsonify({"error": "unauthorized"}), 401
+    body = request.get_json(force=True) or {}
+    code = body.get("code", "").strip().lower()
+    if not code:
+        return jsonify({"error": "missing code"}), 400
+    db, sha = load_db()
+    init_watchlists(db)
+    if code not in db.get("watchlists", {}):
+        return jsonify({"error": "not_found"}), 404
+    sub = get_subscriber(db, chat_id)
+    limits = PLAN_LIMITS.get(sub["plan"], PLAN_LIMITS["free"])
+    current = get_total_watch_count(db, chat_id)
+    if current >= limits["max_watched"]:
+        return jsonify({"error": "limit_reached", "max": limits["max_watched"]}), 403
+    if code not in db["watchlist_subscribers"]:
+        db["watchlist_subscribers"][code] = []
+    if chat_id not in db["watchlist_subscribers"][code]:
+        db["watchlist_subscribers"][code].append(chat_id)
+        save_db(db, sha)
+    return jsonify({"ok": True, "watch_count": get_total_watch_count(db, chat_id)})
+
+
+@app.route("/api/leave", methods=["POST"])
+def api_leave():
+    chat_id = get_user_id_from_request()
+    if not chat_id:
+        return jsonify({"error": "unauthorized"}), 401
+    body = request.get_json(force=True) or {}
+    code = body.get("code", "").strip().lower()
+    if not code:
+        return jsonify({"error": "missing code"}), 400
+    db, sha = load_db()
+    if code in db.get("watchlist_subscribers", {}) and chat_id in db["watchlist_subscribers"][code]:
+        db["watchlist_subscribers"][code].remove(chat_id)
+        save_db(db, sha)
+    return jsonify({"ok": True, "watch_count": get_total_watch_count(db, chat_id)})
+
+
+@app.route("/api/watchlists", methods=["GET"])
+def api_watchlists():
+    db, _ = load_db()
+    init_watchlists(db)
+    result = []
+    for code, wl in db.get("watchlists", {}).items():
+        result.append({
+            "code": code,
+            "name": wl.get("name", code),
+            "icon": wl.get("icon", "📋"),
+            "company_count": len(wl.get("companies", [])),
+        })
+    return jsonify(result)
     if request.method == "GET":
         return "UK Company Watch Bot — OK"
 
@@ -307,6 +493,13 @@ def bot_handler():
     message = body.get("message", {})
     chat_id = str(message.get("chat", {}).get("id", ""))
     text = message.get("text", "").strip()
+
+    # Handle web_app_data (data sent from Mini App via sendData)
+    web_app_data = message.get("web_app_data")
+    if web_app_data and chat_id:
+        data_text = web_app_data.get("data", "")
+        send_telegram(chat_id, f"✅ Action completed in Mini App")
+        return "ok", 200
 
     if not text or not chat_id:
         return "ok", 200

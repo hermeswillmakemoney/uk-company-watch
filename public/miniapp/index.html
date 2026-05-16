@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>UK Company Watch</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0f;
+  --card: #111118;
+  --border: #1e1e2e;
+  --accent: #3b82f6;
+  --text: #e4e4e7;
+  --muted: #71717a;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --radius: 14px;
+  --radius-sm: 10px;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+.header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+.header h1 { font-size: 1.1rem; font-weight: 700; }
+.header .badge {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(59,130,246,.15);
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge.pro { background: rgba(34,197,94,.15); color: var(--success); }
+.badge.business { background: rgba(168,85,247,.15); color: #a855f7; }
+
+/* Tab content */
+.tab-content { display: none; padding: 16px; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+  transition: border-color .2s;
+}
+.card:active { border-color: var(--accent); }
+.card .title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.card .subtitle { color: var(--muted); font-size: 0.8rem; }
+.card .meta { display: flex; gap: 12px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+
+/* Severity badges */
+.severity {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.severity.critical { background: rgba(239,68,68,.15); color: var(--danger); }
+.severity.concerning { background: rgba(245,158,11,.15); color: var(--warning); }
+.severity.notable { background: rgba(59,130,246,.15); color: var(--accent); }
+.severity.routine { background: rgba(113,113,122,.15); color: var(--muted); }
+
+/* Progress bars */
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.progress-bar .fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width .3s;
+}
+.progress-bar .fill.warn { background: var(--warning); }
+.progress-bar .fill.danger { background: var(--danger); }
+
+/* Stats row */
+.stats { display: flex; gap: 12px; margin-bottom: 20px; }
+.stat-card {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  text-align: center;
+}
+.stat-card .num { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+.stat-card .label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+/* Search */
+.search-wrap { position: relative; margin-bottom: 16px; }
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  padding-left: 42px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color .2s;
+}
+.search-input:focus { border-color: var(--accent); }
+.search-input::placeholder { color: var(--muted); }
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all .2s;
+  text-decoration: none;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:active { opacity: 0.85; }
+.btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:active { border-color: var(--accent); }
+.btn-danger { background: rgba(239,68,68,.15); color: var(--danger); }
+.btn-danger:active { background: rgba(239,68,68,.25); }
+.btn-success { background: rgba(34,197,94,.15); color: var(--success); }
+.btn-block { width: 100%; justify-content: center; padding: 12px; }
+
+/* Watchlist cards */
+.wl-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.wl-card .icon { font-size: 1.8rem; }
+.wl-card .info { flex: 1; }
+.wl-card .info .name { font-weight: 600; font-size: 0.95rem; }
+.wl-card .info .count { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+.wl-card .joined-badge {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(34,197,94,.15);
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* Bottom tab bar */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 600px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  z-index: 20;
+}
+.tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 12px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color .2s;
+}
+.tab-btn .icon { font-size: 1.3rem; }
+.tab-btn.active { color: var(--accent); }
+
+/* Loading / empty states */
+.loading { text-align: center; padding: 40px 20px; color: var(--muted); }
+.loading .spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty .icon { font-size: 2.5rem; margin-bottom: 12px; }
+.empty p { font-size: 0.9rem; }
+
+/* Error banner */
+.error-banner {
+  background: rgba(239,68,68,.1);
+  border: 1px solid rgba(239,68,68,.3);
+  color: var(--danger);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  margin: 16px;
+  font-size: 0.85rem;
+}
+
+/* Account page */
+.account-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.account-section h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.account-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.account-row:last-child { border-bottom: none; }
+.account-row .label { color: var(--muted); font-size: 0.85rem; }
+.account-row .value { font-weight: 600; font-size: 0.9rem; }
+
+/* Filing card */
+.filing-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+}
+.filing-card .company { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
+.filing-card .number { color: var(--muted); font-size: 0.75rem; margin-bottom: 8px; }
+.filing-card .summary { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
+.filing-card .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.filing-card .date { color: var(--muted); font-size: 0.75rem; }
+
+/* Search result */
+.search-result {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.search-result .info { flex: 1; }
+.search-result .info .name { font-weight: 600; font-size: 0.9rem; }
+.search-result .info .meta { color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
+.search-result .status {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(34,197,94,.15);
+  color: var(--success);
+  font-weight: 600;
+}
+.search-result .status.dissolved { background: rgba(239,68,68,.15); color: var(--danger); }
+</style>
+</head>
+<body>
+
+<!-- Error banner (hidden by default) -->
+<div id="errorBanner" class="error-banner" style="display:none"></div>
+
+<!-- Header -->
+<div class="header">
+  <h1>🇬🇧 UK Company Watch</h1>
+  <span id="planBadge" class="badge">Free</span>
+</div>
+
+<!-- ==================== HOME TAB ==================== -->
+<div id="tab-home" class="tab-content active">
+  <div id="home-loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading your dashboard…</p>
+  </div>
+  <div id="home-content" style="display:none">
+    <!-- Usage stats -->
+    <div class="stats">
+      <div class="stat-card">
+        <div id="watchCount" class="num">0/1</div>
+        <div class="label">Watches</div>
+      </div>
+      <div class="stat-card">
+        <div id="alertCount" class="num">0/3</div>
+        <div class="label">Alerts</div>
+      </div>
+    </div>
+    <!-- Watch progress -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:0.85rem">Watch usage</span>
+        <span id="watchUsageText" style="font-size:0.8rem;color:var(--muted)">0 of 1</span>
+      </div>
+      <div class="progress-bar"><div id="watchProgress" class="fill" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:0.85rem">Alert usage this week</span>
+        <span id="alertUsageText" style="font-size:0.8rem;color:var(--muted)">0 of 3</span>
+      </div>
+      <div class="progress-bar"><div id="alertProgress" class="fill" style="width:0%"></div></div>
+    </div>
+    <!-- Recent filings -->
+    <h3 style="font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:20px 0 12px">Recent Filings</h3>
+    <div id="filings-list"></div>
+  </div>
+</div>
+
+<!-- ==================== SEARCH TAB ==================== -->
+<div id="tab-search" class="tab-content">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input id="searchInput" class="search-input" type="text" placeholder="Search companies…" autocomplete="off">
+  </div>
+  <div id="search-results"></div>
+  <div id="search-empty" class="empty" style="display:none">
+    <div class="icon">🔍</div>
+    <p>Search for companies by name or number</p>
+  </div>
+  <div id="search-loading" class="loading" style="display:none">
+    <div class="spinner"></div>
+    <p>Searching…</p>
+  </div>
+</div>
+
+<!-- ==================== WATCHES TAB ==================== -->
+<div id="tab-watches" class="tab-content">
+  <div id="watches-loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading your watches…</p>
+  </div>
+  <div id="watches-content" style="display:none">
+    <h3 style="font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px">Individual Watches</h3>
+    <div id="individual-watches"></div>
+    <h3 style="font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:20px 0 12px">Group Watchlists</h3>
+    <div id="group-watches"></div>
+  </div>
+</div>
+
+<!-- ==================== WATCHLISTS TAB ==================== -->
+<div id="tab-watchlists" class="tab-content">
+  <div id="watchlists-loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading watchlists…</p>
+  </div>
+  <div id="watchlists-content" style="display:none">
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px">Join a watchlist to monitor entire sectors at once. Each counts as 1 watch.</p>
+    <div id="watchlists-grid"></div>
+  </div>
+</div>
+
+<!-- ==================== ACCOUNT TAB ==================== -->
+<div id="tab-account" class="tab-content">
+  <div id="account-loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading account…</p>
+  </div>
+  <div id="account-content" style="display:none">
+    <div class="account-section">
+      <h3>Plan</h3>
+      <div class="account-row">
+        <span class="label">Current plan</span>
+        <span id="accountPlan" class="value">Free</span>
+      </div>
+      <div class="account-row">
+        <span class="label">Watches used</span>
+        <span id="accountWatches" class="value">0 / 1</span>
+      </div>
+      <div class="account-row">
+        <span class="label">Alerts this week</span>
+        <span id="accountAlerts" class="value">0 / 3</span>
+      </div>
+      <div class="account-row">
+        <span class="label">Resets</span>
+        <span id="accountReset" class="value">Monday</span>
+      </div>
+    </div>
+    <a id="upgradeBtn" href="#" class="btn btn-primary btn-block" target="_blank" rel="noopener">Upgrade to Pro — £4.99/mo</a>
+  </div>
+</div>
+
+<!-- ==================== TAB BAR ==================== -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="home">
+    <span class="icon">🏠</span>
+    Home
+  </button>
+  <button class="tab-btn" data-tab="search">
+    <span class="icon">🔍</span>
+    Search
+  </button>
+  <button class="tab-btn" data-tab="watches">
+    <span class="icon">📋</span>
+    Watches
+  </button>
+  <button class="tab-btn" data-tab="watchlists">
+    <span class="icon">📊</span>
+    Lists
+  </button>
+  <button class="tab-btn" data-tab="account">
+    <span class="icon">👤</span>
+    Account
+  </button>
+</div>
+
+<script>
+// ====== State ======
+const state = {
+  userId: null,
+  initData: null,
+  user: null,
+  filings: [],
+  watches: [],
+  watchlists: [],
+  allWatchlists: [],
+  watchedCompanyNumbers: new Set(),
+  joinedWatchlistCodes: new Set(),
+};
+
+// ====== Telegram WebApp init ======
+let tg = null;
+try {
+  tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    state.initData = tg.initData;
+    if (tg.initDataUnsafe?.user?.id) {
+      state.userId = String(tg.initDataUnsafe.user.id);
+    }
+  }
+} catch(e) {
+  console.error('Telegram WebApp init error:', e);
+}
+
+// ====== API helpers ======
+const API_BASE = '';
+
+async function apiGet(path) {
+  const url = `${API_BASE}${path}`;
+  const opts = { method: 'GET' };
+  if (state.initData) {
+    opts.headers = { 'X-Telegram-Init-Data': state.initData };
+  }
+  const res = await fetch(url, opts);
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  return res.json();
+}
+
+async function apiPost(path, body) {
+  const url = `${API_BASE}${path}`;
+  const opts = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  };
+  if (state.initData) {
+    opts.headers['X-Telegram-Init-Data'] = state.initData;
+  }
+  const res = await fetch(url, opts);
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  return res.json();
+}
+
+// ====== Error handling ======
+function showError(msg) {
+  const banner = document.getElementById('errorBanner');
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  setTimeout(() => { banner.style.display = 'none'; }, 5000);
+}
+
+// ====== Tab navigation ======
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    if (tab === 'home') loadHome();
+    if (tab === 'watches') loadWatches();
+    if (tab === 'watchlists') loadWatchlists();
+    if (tab === 'account') loadAccount();
+  });
+});
+
+// ====== Severity helpers ======
+function severityClass(s) {
+  if (s === 'critical') return 'critical';
+  if (s === 'concerning') return 'concerning';
+  if (s === 'notable') return 'notable';
+  return 'routine';
+}
+function severityLabel(s) {
+  if (s === 'critical') return '🔴 Critical';
+  if (s === 'concerning') return '⚠️ Concerning';
+  if (s === 'notable') return '📌 Notable';
+  return 'Routine';
+}
+
+// ====== HOME TAB ======
+async function loadHome() {
+  const loading = document.getElementById('home-loading');
+  const content = document.getElementById('home-content');
+  loading.style.display = 'block';
+  content.style.display = 'none';
+
+  try {
+    const user = await apiGet('/api/user');
+    state.user = user;
+    state.watchedCompanyNumbers = new Set((user.watches || []).map(w => w.number));
+    state.joinedWatchlistCodes = new Set((user.watchlists || []).map(w => w.code));
+
+    // Plan badge
+    const badge = document.getElementById('planBadge');
+    badge.textContent = user.plan || 'Free';
+    badge.className = 'badge ' + (user.plan || 'free');
+
+    // Stats
+    const watchCount = user.watch_count || 0;
+    const maxWatched = user.max_watched || 1;
+    const alertsSent = user.alerts_sent_this_week || 0;
+    const maxAlerts = user.max_alerts_per_week || 3;
+
+    document.getElementById('watchCount').textContent = `${watchCount}/${maxWatched}`;
+    document.getElementById('alertCount').textContent = `${alertsSent}/${maxAlerts}`;
+
+    // Progress bars
+    document.getElementById('watchUsageText').textContent = `${watchCount} of ${maxWatched}`;
+    const watchPct = maxWatched > 0 ? Math.min(100, (watchCount / maxWatched) * 100) : 0;
+    const watchFill = document.getElementById('watchProgress');
+    watchFill.style.width = watchPct + '%';
+    watchFill.className = 'fill' + (watchPct >= 90 ? ' danger' : watchPct >= 70 ? ' warn' : '');
+
+    document.getElementById('alertUsageText').textContent = `${alertsSent} of ${maxAlerts}`;
+    const alertPct = maxAlerts > 0 ? Math.min(100, (alertsSent / maxAlerts) * 100) : 0;
+    const alertFill = document.getElementById('alertProgress');
+    alertFill.style.width = alertPct + '%';
+    alertFill.className = 'fill' + (alertPct >= 90 ? ' danger' : alertPct >= 70 ? ' warn' : '');
+
+    // Filings
+    const filings = await apiGet('/api/filings?days=7');
+    state.filings = filings || [];
+    renderFilings();
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+  } catch(e) {
+    loading.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>Failed to load dashboard.<br><small style="color:var(--muted)">${e.message}</small></p></div>`;
+    showError('Failed to load dashboard: ' + e.message);
+  }
+}
+
+function renderFilings() {
+  const container = document.getElementById('filings-list');
+  if (!state.filings.length) {
+    container.innerHTML = `<div class="empty"><div class="icon">📭</div><p>No filings yet. Watch companies to see their filings here.</p></div>`;
+    return;
+  }
+  container.innerHTML = state.filings.map(f => `
+    <div class="filing-card">
+      <div class="company">${escapeHtml(f.company_name)}</div>
+      <div class="number">${f.company_number}</div>
+      <div class="summary">${escapeHtml(f.summary || '')}</div>
+      <div class="footer">
+        <span class="date">${f.filing_date || ''}</span>
+        <span class="severity ${severityClass(f.severity)}">${severityLabel(f.severity)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ====== SEARCH TAB ======
+let searchTimeout = null;
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  clearTimeout(searchTimeout);
+  const q = e.target.value.trim();
+  if (q.length < 2) {
+    document.getElementById('search-results').innerHTML = '';
+    document.getElementById('search-empty').style.display = 'block';
+    return;
+  }
+  searchTimeout = setTimeout(() => doSearch(q), 300);
+});
+
+async function doSearch(q) {
+  document.getElementById('search-empty').style.display = 'none';
+  document.getElementById('search-loading').style.display = 'block';
+  document.getElementById('search-results').innerHTML = '';
+
+  try {
+    const data = await apiGet(`/api/search?q=${encodeURIComponent(q)}`);
+    document.getElementById('search-loading').style.display = 'none';
+    const items = data.items || [];
+    if (!items.length) {
+      document.getElementById('search-results').innerHTML = `<div class="empty"><div class="icon">🔍</div><p>No results for "${escapeHtml(q)}"</p></div>`;
+      return;
+    }
+    document.getElementById('search-results').innerHTML = items.map(item => {
+      const isWatched = state.watchedCompanyNumbers.has(item.company_number);
+      const statusClass = item.company_status === 'dissolved' ? 'dissolved' : '';
+      return `
+        <div class="search-result">
+          <div class="info">
+            <div class="name">${escapeHtml(item.company_name)}</div>
+            <div class="meta">${item.company_number} · ${escapeHtml(item.company_status || '')}</div>
+          </div>
+          <span class="status ${statusClass}">${escapeHtml(item.company_status || 'active')}</span>
+          ${isWatched
+            ? '<span class="btn btn-success" style="cursor:default">✓ Watching</span>'
+            : `<button class="btn btn-primary" onclick="watchCompany('${item.company_number}', '${escapeHtml(item.company_name).replace(/'/g, "\\'")}', this)">Watch</button>`
+          }
+        </div>
+      `;
+    }).join('');
+  } catch(e) {
+    document.getElementById('search-loading').style.display = 'none';
+    showError('Search failed: ' + e.message);
+  }
+}
+
+async function watchCompany(number, name, btn) {
+  btn.disabled = true;
+  btn.textContent = '…';
+  try {
+    const res = await apiPost('/api/watch', { company_number: number });
+    if (res.error === 'limit_reached') {
+      showError('Watch limit reached. Upgrade to add more.');
+      btn.textContent = 'Watch';
+      btn.disabled = false;
+      return;
+    }
+    state.watchedCompanyNumbers.add(number);
+    btn.textContent = '✓ Watching';
+    btn.className = 'btn btn-success';
+    btn.onclick = null;
+    if (tg) tg.HapticFeedback.impactOccurred('light');
+  } catch(e) {
+    btn.textContent = 'Watch';
+    btn.disabled = false;
+    showError('Failed to watch: ' + e.message);
+  }
+}
+
+// ====== WATCHES TAB ======
+async function loadWatches() {
+  const loading = document.getElementById('watches-loading');
+  const content = document.getElementById('watches-content');
+  loading.style.display = 'block';
+  content.style.display = 'none';
+
+  try {
+    const user = await apiGet('/api/user');
+    state.user = user;
+    state.watchedCompanyNumbers = new Set((user.watches || []).map(w => w.number));
+    state.joinedWatchlistCodes = new Set((user.watchlists || []).map(w => w.code));
+
+    // Individual watches
+    const indContainer = document.getElementById('individual-watches');
+    const watches = user.watches || [];
+    if (!watches.length) {
+      indContainer.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">No individual watches. Use Search to find companies.</p>';
+    } else {
+      indContainer.innerHTML = watches.map(w => `
+        <div class="search-result">
+          <div class="info">
+            <div class="name">${escapeHtml(w.name)}</div>
+            <div class="meta">${w.number}</div>
+          </div>
+          <button class="btn btn-danger" onclick="unwatchCompany('${w.number}', this)">✕</button>
+        </div>
+      `).join('');
+    }
+
+    // Group watches
+    const grpContainer = document.getElementById('group-watches');
+    const wl = user.watchlists || [];
+    if (!wl.length) {
+      grpContainer.innerHTML = '<p style="color:var(--muted);font-size:0.85rem">No watchlists joined.</p>';
+    } else {
+      grpContainer.innerHTML = wl.map(w => `
+        <div class="wl-card">
+          <span class="icon">${w.icon || '📋'}</span>
+          <div class="info">
+            <div class="name">${escapeHtml(w.name)}</div>
+            <div class="count">${w.count || 0} companies</div>
+          </div>
+          <button class="btn btn-danger" onclick="leaveWatchlist('${w.code}', this)">Leave</button>
+        </div>
+      `).join('');
+    }
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+  } catch(e) {
+    loading.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>Failed to load watches.</p></div>`;
+  }
+}
+
+async function unwatchCompany(number, btn) {
+  btn.disabled = true;
+  try {
+    await apiPost('/api/unwatch', { company_number: number });
+    state.watchedCompanyNumbers.delete(number);
+    loadWatches();
+    if (tg) tg.HapticFeedback.impactOccurred('light');
+  } catch(e) {
+    btn.disabled = false;
+    showError('Failed to unwatch: ' + e.message);
+  }
+}
+
+// ====== WATCHLISTS TAB ======
+async function loadWatchlists() {
+  const loading = document.getElementById('watchlists-loading');
+  const content = document.getElementById('watchlists-content');
+  loading.style.display = 'block';
+  content.style.display = 'none';
+
+  try {
+    const [user, lists] = await Promise.all([
+      apiGet('/api/user'),
+      apiGet('/api/watchlists'),
+    ]);
+    state.user = user;
+    state.joinedWatchlistCodes = new Set((user.watchlists || []).map(w => w.code));
+    state.allWatchlists = lists || [];
+
+    const container = document.getElementById('watchlists-grid');
+    container.innerHTML = state.allWatchlists.map(wl => {
+      const joined = state.joinedWatchlistCodes.has(wl.code);
+      return `
+        <div class="wl-card">
+          <span class="icon">${wl.icon || '📋'}</span>
+          <div class="info">
+            <div class="name">${escapeHtml(wl.name)}</div>
+            <div class="count">${wl.company_count || 0} companies</div>
+          </div>
+          ${joined
+            ? '<span class="joined-badge">✓ Joined</span>'
+            : `<button class="btn btn-primary" onclick="joinWatchlist('${wl.code}', this)">Join</button>`
+          }
+        </div>
+      `;
+    }).join('');
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+  } catch(e) {
+    loading.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>Failed to load watchlists.</p></div>`;
+  }
+}
+
+async function joinWatchlist(code, btn) {
+  btn.disabled = true;
+  btn.textContent = '…';
+  try {
+    const res = await apiPost('/api/join', { code });
+    if (res.error === 'limit_reached') {
+      showError('Watch limit reached. Upgrade to join more.');
+      btn.textContent = 'Join';
+      btn.disabled = false;
+      return;
+    }
+    state.joinedWatchlistCodes.add(code);
+    btn.textContent = '✓ Joined';
+    btn.className = 'joined-badge';
+    btn.onclick = null;
+    if (tg) tg.HapticFeedback.impactOccurred('light');
+  } catch(e) {
+    btn.textContent = 'Join';
+    btn.disabled = false;
+    showError('Failed to join: ' + e.message);
+  }
+}
+
+async function leaveWatchlist(code, btn) {
+  btn.disabled = true;
+  try {
+    await apiPost('/api/leave', { code });
+    state.joinedWatchlistCodes.delete(code);
+    loadWatches();
+    if (tg) tg.HapticFeedback.impactOccurred('light');
+  } catch(e) {
+    btn.disabled = false;
+    showError('Failed to leave: ' + e.message);
+  }
+}
+
+// ====== ACCOUNT TAB ======
+async function loadAccount() {
+  const loading = document.getElementById('account-loading');
+  const content = document.getElementById('account-content');
+  loading.style.display = 'block';
+  content.style.display = 'none';
+
+  try {
+    const user = await apiGet('/api/user');
+    state.user = user;
+
+    const plan = (user.plan || 'free').charAt(0).toUpperCase() + (user.plan || 'free').slice(1);
+    document.getElementById('accountPlan').textContent = plan;
+    document.getElementById('accountWatches').textContent = `${user.watch_count || 0} / ${user.max_watched || 1}`;
+    document.getElementById('accountAlerts').textContent = `${user.alerts_sent_this_week || 0} / ${user.max_alerts_per_week || 3}`;
+
+    // Reset date (next Monday)
+    const now = new Date();
+    const daysUntilMonday = (7 - now.getDay()) % 7 || 7;
+    const resetDate = new Date(now);
+    resetDate.setDate(now.getDate() + daysUntilMonday);
+    document.getElementById('accountReset').textContent = resetDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    // Upgrade button
+    const upgradeBtn = document.getElementById('upgradeBtn');
+    if (user.plan === 'free') {
+      upgradeBtn.textContent = 'Upgrade to Pro — £4.99/mo';
+      upgradeBtn.href = 'https://t.me/UK_Company_Watch_Bot?start=pro';
+      upgradeBtn.style.display = 'flex';
+    } else if (user.plan === 'pro') {
+      upgradeBtn.textContent = 'Upgrade to Business — £19.99/mo';
+      upgradeBtn.href = 'https://t.me/UK_Company_Watch_Bot?start=business';
+      upgradeBtn.style.display = 'flex';
+    } else {
+      upgradeBtn.style.display = 'none';
+    }
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+  } catch(e) {
+    loading.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>Failed to load account.</p></div>`;
+  }
+}
+
+// ====== Utilities ======
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
+}
+
+// ====== Initial load ======
+loadHome();
+</script>
+</body>
+</html>

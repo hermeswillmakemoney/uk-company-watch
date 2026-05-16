@@ -9,6 +9,15 @@
   "routes": [
     { "src": "/api/bot", "dest": "api/bot.py" },
     { "src": "/api/cron", "dest": "api/cron.py" },
+    { "src": "/api/user", "dest": "api/bot.py" },
+    { "src": "/api/filings", "dest": "api/bot.py" },
+    { "src": "/api/search", "dest": "api/bot.py" },
+    { "src": "/api/watch", "dest": "api/bot.py" },
+    { "src": "/api/unwatch", "dest": "api/bot.py" },
+    { "src": "/api/join", "dest": "api/bot.py" },
+    { "src": "/api/leave", "dest": "api/bot.py" },
+    { "src": "/api/watchlists", "dest": "api/bot.py" },
+    { "src": "/miniapp", "dest": "public/miniapp/index.html" },
     { "src": "/(.*)", "dest": "public/$1" }
   ],
   "crons": [

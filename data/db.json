@@ -7,20 +7,1229 @@
       "max_alerts_per_week": 9999,
       "stripe_subscription_id": null,
       "stripe_customer_id": null,
-      "subscription_status": "active"
+      "subscription_status": "active",
+      "alert_week_start": "2026-05-11",
+      "alerts_sent_this_week": 1
     }
   },
   "watched_companies": {},
   "known_companies": {},
-  "watchlists": {},
-  "watchlist_subscribers": {
-    "fintech": ["8638657311"],
-    "crypto": ["8638657311"],
-    "ai": ["8638657311"],
-    "property": ["8638657311"],
-    "retail": ["8638657311"],
-    "insurtech": ["8638657311"]
+  "watchlists": {
+    "fintech": {
+      "name": "UK Fintech",
+      "icon": "\ud83d\udcb3",
+      "companies": [
+        {
+          "number": "08804411",
+          "name": "REVOLUT LTD"
+        },
+        {
+          "number": "09092149",
+          "name": "STARLING BANK LIMITED"
+        },
+        {
+          "number": "13211214",
+          "name": "WISE LIMITED"
+        },
+        {
+          "number": "07495895",
+          "name": "GOCARDLESS LTD"
+        },
+        {
+          "number": "06968588",
+          "name": "FUNDING CIRCLE LTD"
+        },
+        {
+          "number": "08720992",
+          "name": "MONESE LTD"
+        },
+        {
+          "number": "09736376",
+          "name": "CLEARBANK LIMITED"
+        },
+        {
+          "number": "14002844",
+          "name": "RAILSROCKET LTD"
+        },
+        {
+          "number": "14361848",
+          "name": "SOLDO LTD"
+        },
+        {
+          "number": "09952199",
+          "name": "PLUM FINTECH LTD"
+        },
+        {
+          "number": "08632552",
+          "name": "ATOM BANK PLC"
+        },
+        {
+          "number": "00955491",
+          "name": "TANDEM BANK LIMITED"
+        },
+        {
+          "number": "OC458635",
+          "name": "NUTMEG SAVING AND INVESTMENT LIMITED"
+        },
+        {
+          "number": "SL027367",
+          "name": "CLEO AI LTD"
+        },
+        {
+          "number": "SC709218",
+          "name": "WOMBAT INVESTING LTD"
+        }
+      ]
+    },
+    "crypto": {
+      "name": "UK Crypto",
+      "icon": "\ud83e\ude99",
+      "companies": [
+        {
+          "number": "14701136",
+          "name": "KRAKEN UK LTD"
+        },
+        {
+          "number": "08157033",
+          "name": "BITSTAMP UK LTD"
+        },
+        {
+          "number": "11434241",
+          "name": "CHAINALYSIS LTD"
+        },
+        {
+          "number": "03772048",
+          "name": "COPPER TECHNOLOGIES LTD"
+        },
+        {
+          "number": "13650687",
+          "name": "FIREBLOCKS LTD"
+        },
+        {
+          "number": "11125610",
+          "name": "COINBASE UK LTD"
+        },
+        {
+          "number": "10004019",
+          "name": "CRYPTOCOM LTD"
+        },
+        {
+          "number": "11537321",
+          "name": "GEMINI EUROPE LIMITED"
+        }
+      ]
+    },
+    "ai": {
+      "name": "UK AI & ML",
+      "icon": "\ud83e\udd16",
+      "companies": [
+        {
+          "number": "10185006",
+          "name": "GRAPHCORE LTD"
+        },
+        {
+          "number": "08561272",
+          "name": "IMPROBABLE WORLDS LTD"
+        },
+        {
+          "number": "16594137",
+          "name": "FACULTY AI LTD"
+        },
+        {
+          "number": "07479524",
+          "name": "ONFIDO LTD"
+        },
+        {
+          "number": "09315523",
+          "name": "TRACTABLE LTD"
+        },
+        {
+          "number": "12295325",
+          "name": "STABILITY AI LTD"
+        },
+        {
+          "number": "16465668",
+          "name": "HUGGING FACE LTD"
+        },
+        {
+          "number": "13264637",
+          "name": "DARKTRACE PLC"
+        },
+        {
+          "number": "15588410",
+          "name": "DEEPMIND TECHNOLOGIES LTD"
+        },
+        {
+          "number": "08713046",
+          "name": "WAYVE TECHNOLOGIES LTD"
+        }
+      ]
+    },
+    "property": {
+      "name": "UK Property",
+      "icon": "\ud83c\udfe0",
+      "companies": [
+        {
+          "number": "06426485",
+          "name": "RIGHTMOVE PLC"
+        },
+        {
+          "number": "06074771",
+          "name": "ZOPLA PROPERTY LTD"
+        },
+        {
+          "number": "10887621",
+          "name": "ONTHEMARKET PLC"
+        },
+        {
+          "number": "15846533",
+          "name": "PURPLEBRICKS GROUP PLC"
+        },
+        {
+          "number": "01680058",
+          "name": "FOXTONS GROUP PLC"
+        },
+        {
+          "number": "02122174",
+          "name": "SAVILLS PLC"
+        },
+        {
+          "number": "OC305934",
+          "name": "KNIGHT FRANK LLP"
+        },
+        {
+          "number": "16760486",
+          "name": "JONES LANG LASALLE PLC"
+        },
+        {
+          "number": "08146929",
+          "name": "LENDINVEST PLC"
+        },
+        {
+          "number": "15034787",
+          "name": "HOMELET LTD"
+        },
+        {
+          "number": "17204403",
+          "name": "GOODLORD LTD"
+        },
+        {
+          "number": "10487576",
+          "name": "FLATFAIR LTD"
+        },
+        {
+          "number": "11726983",
+          "name": "MOLO FINANCE LTD"
+        },
+        {
+          "number": "08657841",
+          "name": "LANDLORD VISION LTD"
+        },
+        {
+          "number": "16582814",
+          "name": "CUSHMAN & WAKEFIELD PLC"
+        }
+      ]
+    },
+    "retail": {
+      "name": "UK Retail",
+      "icon": "\ud83d\uded2",
+      "companies": [
+        {
+          "number": "04006623",
+          "name": "ASOS PLC"
+        },
+        {
+          "number": "06968588",
+          "name": "THG PLC"
+        },
+        {
+          "number": "16235474",
+          "name": "OCADO GROUP PLC"
+        },
+        {
+          "number": "13227665",
+          "name": "DELIVEROO PLC"
+        },
+        {
+          "number": "06947854",
+          "name": "JUST EAT TAKEAWAY.COM PLC"
+        },
+        {
+          "number": "16626640",
+          "name": "HELLOFRESH UK LTD"
+        },
+        {
+          "number": "06776852",
+          "name": "WAYFAIR UK LTD"
+        },
+        {
+          "number": "03223028",
+          "name": "AMAZON UK SERVICES LTD"
+        },
+        {
+          "number": "15891239",
+          "name": "GOUSTO LTD"
+        }
+      ]
+    },
+    "insurtech": {
+      "name": "UK InsurTech",
+      "icon": "\ud83d\udee1\ufe0f",
+      "companies": [
+        {
+          "number": "14695368",
+          "name": "ZEGO LTD"
+        },
+        {
+          "number": "08907985",
+          "name": "CUVVA LTD"
+        },
+        {
+          "number": "12735852",
+          "name": "BOUGHT BY MANY LTD"
+        },
+        {
+          "number": "09498559",
+          "name": "BY MILES LTD"
+        },
+        {
+          "number": "11382136",
+          "name": "RECLAIM247 LTD"
+        },
+        {
+          "number": "09365669",
+          "name": "SO-SURE LTD"
+        },
+        {
+          "number": "10575209",
+          "name": "LAKA LTD"
+        },
+        {
+          "number": "08624700",
+          "name": "DEAD HAPPY LTD"
+        }
+      ]
+    }
   },
-  "filing_summaries": [],
-  "known_filings": []
+  "watchlist_subscribers": {
+    "fintech": [
+      "8638657311"
+    ],
+    "crypto": [
+      "8638657311"
+    ],
+    "ai": [
+      "8638657311"
+    ],
+    "property": [
+      "8638657311"
+    ],
+    "retail": [
+      "8638657311"
+    ],
+    "insurtech": [
+      "8638657311"
+    ]
+  },
+  "filing_summaries": [
+    {
+      "company_number": "08804411",
+      "company_name": "08804411",
+      "filing_date": "2026-04-03",
+      "filing_type": "AA",
+      "summary": "08804411 (08804411): AA on 2026-04-03. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "OC305934",
+      "company_name": "OC305934",
+      "filing_date": "2026-05-15",
+      "filing_type": "LLTM01",
+      "summary": "OC305934 (OC305934): LLTM01 on 2026-05-15. Filing type: LLTM01.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "13227665",
+      "company_name": "13227665",
+      "filing_date": "2026-02-09",
+      "filing_type": "PSC02",
+      "summary": "13227665 (13227665): PSC update on 2026-02-09. \ud83d\udccc Person with Significant Control changed \u2014 ultimate ownership may have shifted.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "01680058",
+      "company_name": "01680058",
+      "filing_date": "2026-03-24",
+      "filing_type": "CS01",
+      "summary": "01680058 (01680058): Confirmation statement on 2026-03-24. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "02122174",
+      "company_name": "02122174",
+      "filing_date": "2026-03-23",
+      "filing_type": "SH01",
+      "summary": "02122174 (02122174): Shares allotted on 2026-03-23. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "16465668",
+      "company_name": "16465668",
+      "filing_date": "2025-05-21",
+      "filing_type": "NEWINC",
+      "summary": "16465668 (16465668): Incorporation on 2025-05-21. New company registered.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "14002844",
+      "company_name": "14002844",
+      "filing_date": "2026-03-24",
+      "filing_type": "CS01",
+      "summary": "14002844 (14002844): Confirmation statement on 2026-03-24. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08561272",
+      "company_name": "08561272",
+      "filing_date": "2026-01-23",
+      "filing_type": "TM01",
+      "summary": "08561272 (08561272): Appointment terminated on 2026-01-23. \ud83d\udccc A director or officer's appointment was formally ended.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "14361848",
+      "company_name": "14361848",
+      "filing_date": "2025-09-15",
+      "filing_type": "CS01",
+      "summary": "14361848 (14361848): Confirmation statement on 2025-09-15. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "15034787",
+      "company_name": "15034787",
+      "filing_date": "2026-04-27",
+      "filing_type": "AA",
+      "summary": "15034787 (15034787): AA on 2026-04-27. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08907985",
+      "company_name": "08907985",
+      "filing_date": "2026-03-03",
+      "filing_type": "CH01",
+      "summary": "08907985 (08907985): Director appointed on 2026-03-03. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "14695368",
+      "company_name": "14695368",
+      "filing_date": "2025-09-11",
+      "filing_type": "AA",
+      "summary": "14695368 (14695368): AA on 2025-09-11. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "06426485",
+      "company_name": "06426485",
+      "filing_date": "2026-05-12",
+      "filing_type": "CH01",
+      "summary": "06426485 (06426485): Director appointed on 2026-05-12. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "11726983",
+      "company_name": "11726983",
+      "filing_date": "2025-09-30",
+      "filing_type": "AA",
+      "summary": "11726983 (11726983): AA on 2025-09-30. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "09365669",
+      "company_name": "09365669",
+      "filing_date": "2026-03-31",
+      "filing_type": "AA",
+      "summary": "09365669 (09365669): AA on 2026-03-31. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "00955491",
+      "company_name": "00955491",
+      "filing_date": "2026-03-10",
+      "filing_type": "TM01",
+      "summary": "00955491 (00955491): Appointment terminated on 2026-03-10. \ud83d\udccc A director or officer's appointment was formally ended.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "11125610",
+      "company_name": "11125610",
+      "filing_date": "2023-06-27",
+      "filing_type": "GAZ2",
+      "summary": "11125610 (11125610): Gazette notice on 2023-06-27. \ud83d\udccc Published in the London Gazette \u2014 often relates to insolvency or strike-off proceedings.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "16594137",
+      "company_name": "16594137",
+      "filing_date": "2025-07-20",
+      "filing_type": "NEWINC",
+      "summary": "16594137 (16594137): Incorporation on 2025-07-20. New company registered.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "12735852",
+      "company_name": "12735852",
+      "filing_date": "2025-12-17",
+      "filing_type": "AA",
+      "summary": "12735852 (12735852): AA on 2025-12-17. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "15588410",
+      "company_name": "15588410",
+      "filing_date": "2025-09-16",
+      "filing_type": "GAZ2(A)",
+      "summary": "15588410 (15588410): GAZ2(A) on 2025-09-16. Filing type: GAZ2(A).",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "09952199",
+      "company_name": "09952199",
+      "filing_date": "2026-04-23",
+      "filing_type": "CS01",
+      "summary": "09952199 (09952199): Confirmation statement on 2026-04-23. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "13650687",
+      "company_name": "13650687",
+      "filing_date": "2026-04-21",
+      "filing_type": "AP01",
+      "summary": "13650687 (13650687): Director appointed on 2026-04-21. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "14701136",
+      "company_name": "14701136",
+      "filing_date": "2026-03-08",
+      "filing_type": "CS01",
+      "summary": "14701136 (14701136): Confirmation statement on 2026-03-08. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "16626640",
+      "company_name": "16626640",
+      "filing_date": "2025-08-04",
+      "filing_type": "NEWINC",
+      "summary": "16626640 (16626640): Incorporation on 2025-08-04. New company registered.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "OC458635",
+      "company_name": "OC458635",
+      "filing_date": "2025-11-03",
+      "filing_type": "LLAA01",
+      "summary": "OC458635 (OC458635): LLAA01 on 2025-11-03. Filing type: LLAA01.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "10575209",
+      "company_name": "10575209",
+      "filing_date": "2026-03-25",
+      "filing_type": "RP01SH01",
+      "summary": "10575209 (10575209): RP01SH01 on 2026-03-25. Filing type: RP01SH01.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "SC709218",
+      "company_name": "SC709218",
+      "filing_date": "2025-09-28",
+      "filing_type": "CS01",
+      "summary": "SC709218 (SC709218): Confirmation statement on 2025-09-28. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08720992",
+      "company_name": "08720992",
+      "filing_date": "2026-03-07",
+      "filing_type": "SH01",
+      "summary": "08720992 (08720992): Shares allotted on 2026-03-07. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "06968588",
+      "company_name": "06968588",
+      "filing_date": "2026-05-05",
+      "filing_type": "AA",
+      "summary": "06968588 (06968588): AA on 2026-05-05. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "16760486",
+      "company_name": "16760486",
+      "filing_date": "2025-11-05",
+      "filing_type": "PSC04",
+      "summary": "16760486 (16760486): PSC04 on 2025-11-05. Filing type: PSC04.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08157033",
+      "company_name": "08157033",
+      "filing_date": "2025-09-11",
+      "filing_type": "RESOLUTIONS",
+      "summary": "08157033 (08157033): RESOLUTIONS on 2025-09-11. Filing type: RESOLUTIONS.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "03772048",
+      "company_name": "03772048",
+      "filing_date": "2025-06-24",
+      "filing_type": "AA",
+      "summary": "03772048 (03772048): AA on 2025-06-24. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "06947854",
+      "company_name": "06947854",
+      "filing_date": "2026-03-17",
+      "filing_type": "CS01",
+      "summary": "06947854 (06947854): Confirmation statement on 2026-03-17. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "13211214",
+      "company_name": "13211214",
+      "filing_date": "2026-05-15",
+      "filing_type": "CERT10",
+      "summary": "13211214 (13211214): CERT10 on 2026-05-15. Filing type: CERT10.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "07495895",
+      "company_name": "07495895",
+      "filing_date": "2026-04-12",
+      "filing_type": "AA",
+      "summary": "07495895 (07495895): AA on 2026-04-12. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08624700",
+      "company_name": "08624700",
+      "filing_date": "2026-01-16",
+      "filing_type": "AM10",
+      "summary": "08624700 (08624700): AM10 on 2026-01-16. Filing type: AM10.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "15891239",
+      "company_name": "15891239",
+      "filing_date": "2025-08-26",
+      "filing_type": "GAZ2(A)",
+      "summary": "15891239 (15891239): GAZ2(A) on 2025-08-26. Filing type: GAZ2(A).",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08146929",
+      "company_name": "08146929",
+      "filing_date": "2026-05-01",
+      "filing_type": "AP04",
+      "summary": "08146929 (08146929): Director appointed on 2026-05-01. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "10487576",
+      "company_name": "10487576",
+      "filing_date": "2026-02-02",
+      "filing_type": "PSC08",
+      "summary": "10487576 (10487576): PSC08 on 2026-02-02. Filing type: PSC08.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "16235474",
+      "company_name": "16235474",
+      "filing_date": "2026-01-23",
+      "filing_type": "CERTNM",
+      "summary": "16235474 (16235474): Name change on 2026-01-23. \ud83d\udccc Company changed its name \u2014 could signal rebrand, pivot, or acquisition.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "12295325",
+      "company_name": "12295325",
+      "filing_date": "2026-04-01",
+      "filing_type": "CS01",
+      "summary": "12295325 (12295325): Confirmation statement on 2026-04-01. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "17204403",
+      "company_name": "17204403",
+      "filing_date": "2026-05-07",
+      "filing_type": "NEWINC",
+      "summary": "17204403 (17204403): Incorporation on 2026-05-07. New company registered.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08657841",
+      "company_name": "08657841",
+      "filing_date": "2026-02-09",
+      "filing_type": "AA",
+      "summary": "08657841 (08657841): AA on 2026-02-09. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "09315523",
+      "company_name": "09315523",
+      "filing_date": "2025-11-04",
+      "filing_type": "CS01",
+      "summary": "09315523 (09315523): Confirmation statement on 2025-11-04. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "11537321",
+      "company_name": "11537321",
+      "filing_date": "2021-11-30",
+      "filing_type": "GAZ2(A)",
+      "summary": "11537321 (11537321): GAZ2(A) on 2021-11-30. Filing type: GAZ2(A).",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "SL027367",
+      "company_name": "SL027367",
+      "filing_date": "2021-09-15",
+      "filing_type": "LP6",
+      "summary": "SL027367 (SL027367): LP6 on 2021-09-15. Filing type: LP6.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "06074771",
+      "company_name": "06074771",
+      "filing_date": "2026-05-12",
+      "filing_type": "CS01",
+      "summary": "06074771 (06074771): Confirmation statement on 2026-05-12. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "15846533",
+      "company_name": "15846533",
+      "filing_date": "2026-04-17",
+      "filing_type": "CS01",
+      "summary": "15846533 (15846533): Confirmation statement on 2026-04-17. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "11382136",
+      "company_name": "11382136",
+      "filing_date": "2026-05-11",
+      "filing_type": "CS01",
+      "summary": "11382136 (11382136): Confirmation statement on 2026-05-11. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "13264637",
+      "company_name": "13264637",
+      "filing_date": "2026-03-25",
+      "filing_type": "CS01",
+      "summary": "13264637 (13264637): Confirmation statement on 2026-03-25. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "03223028",
+      "company_name": "03223028",
+      "filing_date": "2025-12-01",
+      "filing_type": "CS01",
+      "summary": "03223028 (03223028): Confirmation statement on 2025-12-01. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "09498559",
+      "company_name": "09498559",
+      "filing_date": "2025-12-31",
+      "filing_type": "RP01SH01",
+      "summary": "09498559 (09498559): RP01SH01 on 2025-12-31. Filing type: RP01SH01.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08632552",
+      "company_name": "08632552",
+      "filing_date": "2026-05-03",
+      "filing_type": "CH01",
+      "summary": "08632552 (08632552): Director appointed on 2026-05-03. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "06776852",
+      "company_name": "06776852",
+      "filing_date": "2025-10-14",
+      "filing_type": "CS01",
+      "summary": "06776852 (06776852): Confirmation statement on 2025-10-14. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "11434241",
+      "company_name": "11434241",
+      "filing_date": "2025-09-19",
+      "filing_type": "TM01",
+      "summary": "11434241 (11434241): Appointment terminated on 2025-09-19. \ud83d\udccc A director or officer's appointment was formally ended.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "10887621",
+      "company_name": "10887621",
+      "filing_date": "2025-11-26",
+      "filing_type": "CH01",
+      "summary": "10887621 (10887621): Director appointed on 2025-11-26. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "09736376",
+      "company_name": "09736376",
+      "filing_date": "2026-04-24",
+      "filing_type": "AA",
+      "summary": "09736376 (09736376): AA on 2026-04-24. Filing type: AA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "16582814",
+      "company_name": "16582814",
+      "filing_date": "2025-07-15",
+      "filing_type": "NEWINC",
+      "summary": "16582814 (16582814): Incorporation on 2025-07-15. New company registered.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "09092149",
+      "company_name": "09092149",
+      "filing_date": "2026-03-02",
+      "filing_type": "CS01",
+      "summary": "09092149 (09092149): Confirmation statement on 2026-03-02. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "07479524",
+      "company_name": "07479524",
+      "filing_date": "2026-05-02",
+      "filing_type": "PSC02",
+      "summary": "07479524 (07479524): PSC update on 2026-05-02. \ud83d\udccc Person with Significant Control changed \u2014 ultimate ownership may have shifted.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "04006623",
+      "company_name": "04006623",
+      "filing_date": "2026-05-15",
+      "filing_type": "SH01",
+      "summary": "04006623 (04006623): Shares allotted on 2026-05-15. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "08713046",
+      "company_name": "08713046",
+      "filing_date": "2018-11-15",
+      "filing_type": "GAZ2",
+      "summary": "08713046 (08713046): Gazette notice on 2018-11-15. \ud83d\udccc Published in the London Gazette \u2014 often relates to insolvency or strike-off proceedings.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "10185006",
+      "company_name": "10185006",
+      "filing_date": "2026-04-30",
+      "filing_type": "MA",
+      "summary": "10185006 (10185006): MA on 2026-04-30. Filing type: MA.",
+      "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "10004019",
+      "company_name": "10004019",
+      "filing_date": "2021-06-22",
+      "filing_type": "GAZ2(A)",
+      "summary": "10004019 (10004019): GAZ2(A) on 2021-06-22. Filing type: GAZ2(A).",
+      "summary_date": "2026-05-16"
+    }
+  ],
+  "known_filings": [
+    {
+      "company_number": "08804411",
+      "filing_date": "2026-04-03",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-full"
+    },
+    {
+      "company_number": "OC305934",
+      "filing_date": "2026-05-15",
+      "filing_type": "LLTM01",
+      "description": "termination-member-limited-liability-partnership-with-name-termination-date"
+    },
+    {
+      "company_number": "13227665",
+      "filing_date": "2026-02-09",
+      "filing_type": "PSC02",
+      "description": "notification-of-a-person-with-significant-control"
+    },
+    {
+      "company_number": "01680058",
+      "filing_date": "2026-03-24",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "02122174",
+      "filing_date": "2026-03-23",
+      "filing_type": "SH01",
+      "description": "capital-allotment-shares"
+    },
+    {
+      "company_number": "16465668",
+      "filing_date": "2025-05-21",
+      "filing_type": "NEWINC",
+      "description": "incorporation-company"
+    },
+    {
+      "company_number": "14002844",
+      "filing_date": "2026-03-24",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "08561272",
+      "filing_date": "2026-01-23",
+      "filing_type": "TM01",
+      "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "14361848",
+      "filing_date": "2025-09-15",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "15034787",
+      "filing_date": "2026-04-27",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-micro-entity"
+    },
+    {
+      "company_number": "08907985",
+      "filing_date": "2026-03-03",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
+    },
+    {
+      "company_number": "14695368",
+      "filing_date": "2025-09-11",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-dormant"
+    },
+    {
+      "company_number": "06426485",
+      "filing_date": "2026-05-12",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
+    },
+    {
+      "company_number": "11726983",
+      "filing_date": "2025-09-30",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-micro-entity"
+    },
+    {
+      "company_number": "09365669",
+      "filing_date": "2026-03-31",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-micro-entity"
+    },
+    {
+      "company_number": "00955491",
+      "filing_date": "2026-03-10",
+      "filing_type": "TM01",
+      "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "11125610",
+      "filing_date": "2023-06-27",
+      "filing_type": "GAZ2",
+      "description": "gazette-dissolved-compulsory"
+    },
+    {
+      "company_number": "16594137",
+      "filing_date": "2025-07-20",
+      "filing_type": "NEWINC",
+      "description": "incorporation-company"
+    },
+    {
+      "company_number": "12735852",
+      "filing_date": "2025-12-17",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-dormant"
+    },
+    {
+      "company_number": "15588410",
+      "filing_date": "2025-09-16",
+      "filing_type": "GAZ2(A)",
+      "description": "gazette-dissolved-voluntary"
+    },
+    {
+      "company_number": "09952199",
+      "filing_date": "2026-04-23",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "13650687",
+      "filing_date": "2026-04-21",
+      "filing_type": "AP01",
+      "description": "appoint-person-director-company-with-name-date"
+    },
+    {
+      "company_number": "14701136",
+      "filing_date": "2026-03-08",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "16626640",
+      "filing_date": "2025-08-04",
+      "filing_type": "NEWINC",
+      "description": "incorporation-company"
+    },
+    {
+      "company_number": "OC458635",
+      "filing_date": "2025-11-03",
+      "filing_type": "LLAA01",
+      "description": "change-account-reference-date-limited-liability-partnership-current-shortened"
+    },
+    {
+      "company_number": "10575209",
+      "filing_date": "2026-03-25",
+      "filing_type": "RP01SH01",
+      "description": "legacy"
+    },
+    {
+      "company_number": "SC709218",
+      "filing_date": "2025-09-28",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "08720992",
+      "filing_date": "2026-03-07",
+      "filing_type": "SH01",
+      "description": "capital-allotment-shares"
+    },
+    {
+      "company_number": "06968588",
+      "filing_date": "2026-05-05",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-full"
+    },
+    {
+      "company_number": "16760486",
+      "filing_date": "2025-11-05",
+      "filing_type": "PSC04",
+      "description": "change-to-a-person-with-significant-control"
+    },
+    {
+      "company_number": "08157033",
+      "filing_date": "2025-09-11",
+      "filing_type": "RESOLUTIONS",
+      "description": "resolution"
+    },
+    {
+      "company_number": "03772048",
+      "filing_date": "2025-06-24",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-micro-entity"
+    },
+    {
+      "company_number": "06947854",
+      "filing_date": "2026-03-17",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "13211214",
+      "filing_date": "2026-05-15",
+      "filing_type": "CERT10",
+      "description": "certificate-re-registration-public-limited-company-to-private"
+    },
+    {
+      "company_number": "07495895",
+      "filing_date": "2026-04-12",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-group"
+    },
+    {
+      "company_number": "08624700",
+      "filing_date": "2026-01-16",
+      "filing_type": "AM10",
+      "description": "liquidation-in-administration-progress-report"
+    },
+    {
+      "company_number": "15891239",
+      "filing_date": "2025-08-26",
+      "filing_type": "GAZ2(A)",
+      "description": "gazette-dissolved-voluntary"
+    },
+    {
+      "company_number": "08146929",
+      "filing_date": "2026-05-01",
+      "filing_type": "AP04",
+      "description": "appoint-corporate-secretary-company-with-name-date"
+    },
+    {
+      "company_number": "10487576",
+      "filing_date": "2026-02-02",
+      "filing_type": "PSC08",
+      "description": "notification-of-a-person-with-significant-control-statement"
+    },
+    {
+      "company_number": "16235474",
+      "filing_date": "2026-01-23",
+      "filing_type": "CERTNM",
+      "description": "certificate-change-of-name-company"
+    },
+    {
+      "company_number": "12295325",
+      "filing_date": "2026-04-01",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "17204403",
+      "filing_date": "2026-05-07",
+      "filing_type": "NEWINC",
+      "description": "incorporation-company"
+    },
+    {
+      "company_number": "08657841",
+      "filing_date": "2026-02-09",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-micro-entity"
+    },
+    {
+      "company_number": "09315523",
+      "filing_date": "2025-11-04",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "11537321",
+      "filing_date": "2021-11-30",
+      "filing_type": "GAZ2(A)",
+      "description": "gazette-dissolved-voluntary"
+    },
+    {
+      "company_number": "SL027367",
+      "filing_date": "2021-09-15",
+      "filing_type": "LP6",
+      "description": "legacy"
+    },
+    {
+      "company_number": "06074771",
+      "filing_date": "2026-05-12",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "15846533",
+      "filing_date": "2026-04-17",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "11382136",
+      "filing_date": "2026-05-11",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "13264637",
+      "filing_date": "2026-03-25",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "03223028",
+      "filing_date": "2025-12-01",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "09498559",
+      "filing_date": "2025-12-31",
+      "filing_type": "RP01SH01",
+      "description": "legacy"
+    },
+    {
+      "company_number": "08632552",
+      "filing_date": "2026-05-03",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
+    },
+    {
+      "company_number": "06776852",
+      "filing_date": "2025-10-14",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "11434241",
+      "filing_date": "2025-09-19",
+      "filing_type": "TM01",
+      "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "10887621",
+      "filing_date": "2025-11-26",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
+    },
+    {
+      "company_number": "09736376",
+      "filing_date": "2026-04-24",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-full"
+    },
+    {
+      "company_number": "16582814",
+      "filing_date": "2025-07-15",
+      "filing_type": "NEWINC",
+      "description": "incorporation-company"
+    },
+    {
+      "company_number": "09092149",
+      "filing_date": "2026-03-02",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "07479524",
+      "filing_date": "2026-05-02",
+      "filing_type": "PSC02",
+      "description": "notification-of-a-person-with-significant-control"
+    },
+    {
+      "company_number": "04006623",
+      "filing_date": "2026-05-15",
+      "filing_type": "SH01",
+      "description": "capital-allotment-shares"
+    },
+    {
+      "company_number": "08713046",
+      "filing_date": "2018-11-15",
+      "filing_type": "GAZ2",
+      "description": "gazette-dissolved-liquidation"
+    },
+    {
+      "company_number": "10185006",
+      "filing_date": "2026-04-30",
+      "filing_type": "MA",
+      "description": "memorandum-articles"
+    },
+    {
+      "company_number": "10004019",
+      "filing_date": "2021-06-22",
+      "filing_type": "GAZ2(A)",
+      "description": "gazette-dissolved-voluntary"
+    }
+  ]
 }

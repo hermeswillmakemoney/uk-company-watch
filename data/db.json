@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-05-11",
-      "alerts_sent_this_week": 2
+      "alerts_sent_this_week": 3
     }
   },
   "watched_companies": {},

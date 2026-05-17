@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-05-11",
-      "alerts_sent_this_week": 1
+      "alerts_sent_this_week": 2
     }
   },
   "watched_companies": {},
@@ -844,6 +844,14 @@
       "filing_type": "GAZ2(A)",
       "summary": "10004019 (10004019): GAZ2(A) on 2021-06-22. Filing type: GAZ2(A).",
       "summary_date": "2026-05-16"
+    },
+    {
+      "company_number": "09952199",
+      "company_name": "09952199",
+      "filing_date": "2026-05-16",
+      "filing_type": "MA",
+      "summary": "09952199 (09952199): MA on 2026-05-16. Filing type: MA.",
+      "summary_date": "2026-05-17"
     }
   ],
   "known_filings": [
@@ -1230,6 +1238,12 @@
       "filing_date": "2021-06-22",
       "filing_type": "GAZ2(A)",
       "description": "gazette-dissolved-voluntary"
+    },
+    {
+      "company_number": "09952199",
+      "filing_date": "2026-05-16",
+      "filing_type": "MA",
+      "description": "memorandum-articles"
     }
   ]
 }

@@ -278,11 +278,11 @@ def handler(request):
             sub["alert_week_start"] = current_week_start
             sub["alerts_sent_this_week"] = 0
 
-        # Calculate remaining
+        # Calculate remaining alert slots
         remaining = max_alerts - alerts_sent_this_week
 
         if remaining <= 0:
-            # Limit hit — send warning if not already sent today
+            # Limit already hit — send warning if not already sent today
             if sub.get("limit_warning_sent_date") != today_date:
                 reset_date = (datetime.utcnow() + timedelta(days=7 - datetime.utcnow().weekday())).strftime("%Y-%m-%d")
                 send_telegram(chat_id,
@@ -294,20 +294,27 @@ def handler(request):
                 sub["limit_warning_sent_date"] = today_date
             continue
 
-        # Send the alert
+        # Each filing counts as 1 alert. Only send up to the remaining limit.
+        to_send = user_summaries[:remaining]
+        dropped = len(user_summaries) - len(to_send)
+
+        # Send the alert(s)
         lines = ["📋 <b>Your Company Alerts</b>\n"]
-        for s in user_summaries:
+        for s in to_send:
             lines.append(f"🏢 <b>{s['company_name']}</b> ({s['company_number']})")
             lines.append(f"  {s['summary']}")
             lines.append("")
+        if dropped > 0:
+            lines.append(f"⚠️ {dropped} more filing(s) not sent — weekly alert limit reached.")
+            lines.append("Upgrade: /upgrade pro")
         send_telegram(chat_id, "\n".join(lines))
 
-        # Update counter
-        alerts_sent_this_week += 1
+        # Update counter by the number of filings actually sent
+        alerts_sent_this_week += len(to_send)
         sub["alerts_sent_this_week"] = alerts_sent_this_week
         sent += 1
 
-        # If this was the last alert before limit, tell them
+        # If limit is now hit, send warning
         if alerts_sent_this_week >= max_alerts:
             reset_date = (datetime.utcnow() + timedelta(days=7 - datetime.utcnow().weekday())).strftime("%Y-%m-%d")
             send_telegram(chat_id,

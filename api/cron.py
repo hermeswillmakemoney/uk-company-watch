@@ -21,42 +21,127 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from db import load_db, save_db, get_user_watched_companies, init_watchlists
 
+# Filing type code -> (human-readable label, severity, explanation)
+# Only needs entries for types where we want a custom severity/explanation.
+# For any unknown type, the CH API's "description" field is used to auto-generate
+# a readable name (e.g. "memorandum-articles" -> "Memorandum Articles").
 FILING_TYPE_MAP = {
-    "AA01": ("Annual return", "routine", "Annual compliance check-in. Nothing unusual."),
+    # Accounts & returns
+    "AA": ("Accounts", "routine", "Annual accounts filed."),
+    "AA01": ("Accounts", "routine", "Annual accounts filed."),
+    "AB01": ("Accounts", "routine", "Annual accounts filed."),
     "AR01": ("Annual return", "routine", "Annual compliance check-in. Nothing unusual."),
-    "CH01": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
+    # Confirmation / compliance
+    "CS01": ("Confirmation statement", "routine", "Annual compliance filing. Confirms company details are current."),
+    "CS02": ("Confirmation statement", "routine", "Annual compliance filing with updates."),
+    # Directors & officers
+    "AP01": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
+    "AP02": ("Secretary appointed", "routine", "New company secretary appointed."),
+    "AP03": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
+    "AP04": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
+    "CH01": ("Director details changed", "routine", "Director's recorded details updated."),
     "CH02": ("Director resigned", "concerning", "Board member left. Watch for follow-up resignations or instability."),
     "CH03": ("Director details changed", "routine", "Minor admin update to a director's recorded details."),
-    "CS01": ("Confirmation statement", "routine", "Annual compliance filing. Confirms company details are current."),
+    "CH04": ("Director resigned", "concerning", "Board member left. Watch for follow-up resignations or instability."),
+    "TM01": ("Director terminated", "notable", "A director's appointment was formally ended."),
+    "TM02": ("Secretary terminated", "routine", "A secretary's appointment was formally ended."),
+    "TM03": ("Director terminated", "notable", "A director's appointment was formally ended."),
+    # Address & name
     "AD01": ("Address changed", "notable", "Registered office moved. Could be growth, cost-cutting, or red flag if moving to a PO box."),
+    "AD02": ("Address changed", "notable", "Registered office address changed."),
+    "AD03": ("Address changed", "notable", "Registered office address changed."),
+    "AD04": ("Address changed", "notable", "Registered office address changed."),
+    "CERTNM": ("Name change", "notable", "Company changed its name — could signal rebrand, pivot, or acquisition."),
+    "NM01": ("Name change", "notable", "Company changed its name via resolution."),
+    "NM04": ("Name change", "notable", "Company name changed following a direction."),
+    # Shares & capital
     "SH01": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH02": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH03": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH04": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH05": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
     "SH06": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH07": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH08": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH09": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "SH10": ("Shares allotted", "notable", "New shares issued — likely fundraising, employee options, or bringing in a new investor."),
+    "RP01": ("Share buyback", "notable", "Company bought back its own shares — could signal confidence or insider activity."),
+    "RP02": ("Share buyback", "notable", "Company bought back its own shares — could signal confidence or insider activity."),
+    "RP03": ("Share buyback", "notable", "Company bought back its own shares — could signal confidence or insider activity."),
+    "CA01": ("Capital changed", "notable", "Company's share capital has changed."),
+    "CA02": ("Capital changed", "notable", "Company's share capital has changed."),
+    # Mortgages & charges
     "MG01": ("Mortgage/charge", "concerning", "Secured debt registered. Company has borrowed against assets."),
+    "MG02": ("Mortgage/charge", "concerning", "Secured debt registered. Company has borrowed against assets."),
+    "MG03": ("Mortgage/charge", "concerning", "Secured debt registered. Company has borrowed against assets."),
+    "MG04": ("Mortgage/charge", "concerning", "Secured debt registered. Company has borrowed against assets."),
+    "MR01": ("Mortgage registered", "concerning", "A mortgage or charge registered against company assets."),
+    "MR02": ("Mortgage registered", "concerning", "A mortgage or charge registered against company assets."),
+    "MR03": ("Mortgage registered", "concerning", "A mortgage or charge registered against company assets."),
+    "MR04": ("Mortgage satisfied", "routine", "A previous mortgage/charge has been paid off and released."),
+    "MR05": ("Mortgage satisfied", "routine", "A previous mortgage/charge has been paid off and released."),
+    "MR06": ("Mortgage satisfied", "routine", "A previous mortgage/charge has been paid off and released."),
+    # Insolvency & winding up
     "LIQ01": ("Liquidation", "critical", "Company is being wound up. Creditors should act immediately."),
+    "LIQ02": ("Liquidation", "critical", "Company is being wound up. Creditors should act immediately."),
     "WUO1": ("Winding up", "critical", "Company is being wound up. Creditors should act immediately."),
+    "WU01": ("Winding up", "critical", "Company is being wound up. Creditors should act immediately."),
     "DS01": ("Dissolution", "concerning", "Company applied to be struck off. Could be dormant or closing down."),
+    "DS02": ("Dissolution", "concerning", "Company dissolved following strike-off."),
+    # Gazette
     "GAZ1": ("Gazette notice", "notable", "Published in the London Gazette — often relates to insolvency or strike-off proceedings."),
     "GAZ2": ("Gazette notice", "notable", "Published in the London Gazette — often relates to insolvency or strike-off proceedings."),
-    "TM01": ("Appointment terminated", "notable", "A director or officer's appointment was formally ended."),
-    "TM02": ("Appointment terminated", "notable", "A director or officer's appointment was formally ended."),
-    "AP01": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
-    "AP04": ("Director appointed", "notable", "New director on the board — could signal strategic shift or new investment."),
+    # Incorporation & re-registration
     "NEWINC": ("Incorporation", "routine", "New company registered."),
-    "CERTNM": ("Name change", "notable", "Company changed its name — could signal rebrand, pivot, or acquisition."),
-    "MR01": ("Mortgage registered", "concerning", "A mortgage or charge registered against company assets."),
-    "MR04": ("Mortgage satisfied", "routine", "A previous mortgage/charge has been paid off and released."),
+    "RR01": ("Re-registration", "notable", "Company changed its legal structure."),
+    "RR02": ("Re-registration", "notable", "Company changed its legal structure (e.g. private to public)."),
+    "RR03": ("Re-registration", "notable", "Company changed its legal structure."),
+    # PSC (Person with Significant Control)
     "PSC01": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
     "PSC02": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
-    "RP01": ("Share buyback", "notable", "Company bought back its own shares — could signal confidence or insider activity."),
-    "RR02": ("Re-registration", "notable", "Company changed its legal structure (e.g. private to public)."),
+    "PSC03": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    "PSC04": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    "PSC05": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    "PSC06": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    "PSC07": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    "PSC08": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    "PSC09": ("PSC update", "notable", "Person with Significant Control changed — ultimate ownership may have shifted."),
+    # Memorandum & Articles
+    "MA": ("Memorandum & Articles", "notable", "Company filed or amended its Memorandum and Articles of Association — changes to its constitution."),
+    "MA01": ("Memorandum & Articles", "notable", "Company filed or amended its Memorandum and Articles of Association — changes to its constitution."),
+    # Constitution
+    "CC01": ("Constitution", "notable", "Change to company constitution."),
+    "CC02": ("Constitution", "notable", "Change to company constitution."),
+    "CC03": ("Constitution", "notable", "Change to company constitution."),
+    "CC04": ("Constitution", "notable", "Change to company constitution."),
+    # Auditors
+    "AA02": ("Auditor appointed", "routine", "New auditor appointed."),
+    "AA03": ("Auditor resigned", "routine", "Auditor resigned."),
+    "AA04": ("Auditor removed", "routine", "Auditor removed."),
 }
 
 
+def _description_to_label(desc):
+    """Convert a CH API description string to a human-readable label.
+    
+    Examples:
+        'memorandum-articles' -> 'Memorandum Articles'
+        'confirmation-statement-with-updates' -> 'Confirmation Statement With Updates'
+        'accounts-with-accounts-type-group' -> 'Accounts With Accounts Type Group'
+    """
+    if not desc:
+        return ""
+    # Replace hyphens with spaces and title-case
+    return desc.replace("-", " ").replace("_", " ").title()
+
+
 def generate_summary(company_name, company_number, filing_date, filing_type, description):
+    # Look up filing type in curated map
     if filing_type in FILING_TYPE_MAP:
         label, severity, explanation = FILING_TYPE_MAP[filing_type]
     else:
-        label = filing_type
+        # Fallback: use the CH API description field to build a readable label
+        label = _description_to_label(description) or filing_type
         severity = "routine"
         explanation = f"Filing type: {filing_type}."
     flag = ""
@@ -137,6 +222,12 @@ def handler(request):
             if key not in known_set:
                 known_set.add(key)
                 name = db["known_companies"].get(num, {}).get("name", num)
+                # If we don't have the name cached, fetch it from CH API
+                if name == num:
+                    company_data = ch_fetch(f"/company/{num}")
+                    if company_data:
+                        name = company_data.get("company_name", num)
+                        db["known_companies"][num] = {"name": name}
                 new_filings.append({
                     "company_number": num, "company_name": name,
                     "filing_date": fdate, "filing_type": ftype, "description": desc,

@@ -8,12 +8,16 @@
       "stripe_subscription_id": null,
       "stripe_customer_id": null,
       "subscription_status": "active",
-      "alert_week_start": "2026-05-11",
-      "alerts_sent_this_week": 3
+      "alert_week_start": "2026-05-18",
+      "alerts_sent_this_week": 1
     }
   },
   "watched_companies": {},
-  "known_companies": {},
+  "known_companies": {
+    "13211214": {
+      "name": "WISE LIMITED"
+    }
+  },
   "watchlists": {
     "fintech": {
       "name": "UK Fintech",
@@ -852,6 +856,14 @@
       "filing_type": "MA",
       "summary": "09952199 (09952199): MA on 2026-05-16. Filing type: MA.",
       "summary_date": "2026-05-17"
+    },
+    {
+      "company_number": "13211214",
+      "company_name": "WISE LIMITED",
+      "filing_date": "2026-05-18",
+      "filing_type": "TM01",
+      "summary": "WISE LIMITED (13211214): Director terminated on 2026-05-18. \ud83d\udccc A director's appointment was formally ended.",
+      "summary_date": "2026-05-19"
     }
   ],
   "known_filings": [
@@ -1244,6 +1256,12 @@
       "filing_date": "2026-05-16",
       "filing_type": "MA",
       "description": "memorandum-articles"
+    },
+    {
+      "company_number": "13211214",
+      "filing_date": "2026-05-18",
+      "filing_type": "TM01",
+      "description": "termination-director-company-with-name-termination-date"
     }
   ]
 }

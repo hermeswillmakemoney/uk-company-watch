@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-05-18",
-      "alerts_sent_this_week": 1
+      "alerts_sent_this_week": 2
     }
   },
   "watched_companies": {},
@@ -864,6 +864,14 @@
       "filing_type": "TM01",
       "summary": "WISE LIMITED (13211214): Director terminated on 2026-05-18. \ud83d\udccc A director's appointment was formally ended.",
       "summary_date": "2026-05-19"
+    },
+    {
+      "company_number": "13211214",
+      "company_name": "WISE LIMITED",
+      "filing_date": "2026-05-21",
+      "filing_type": "OC",
+      "summary": "WISE LIMITED (13211214): Court Order on 2026-05-21. Filing type: OC.",
+      "summary_date": "2026-05-21"
     }
   ],
   "known_filings": [
@@ -1262,6 +1270,12 @@
       "filing_date": "2026-05-18",
       "filing_type": "TM01",
       "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "13211214",
+      "filing_date": "2026-05-21",
+      "filing_type": "OC",
+      "description": "court-order"
     }
   ]
 }

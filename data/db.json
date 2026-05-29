@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-05-25",
-      "alerts_sent_this_week": 5
+      "alerts_sent_this_week": 6
     }
   },
   "watched_companies": {},
@@ -356,14 +356,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "13211214",
-      "company_name": "WISE LIMITED",
-      "filing_date": "2026-05-21",
-      "filing_type": "OC",
-      "summary": "WISE LIMITED (13211214): Court Order on 2026-05-21. Filing type: OC.",
-      "summary_date": "2026-05-21"
-    },
-    {
       "company_number": "09952199",
       "company_name": "PLUM FINTECH LIMITED",
       "filing_date": "2026-05-21",
@@ -426,6 +418,14 @@
       "filing_type": "SH06",
       "summary": "RIGHTMOVE PLC (06426485): Shares allotted on 2026-05-27. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
       "summary_date": "2026-05-28"
+    },
+    {
+      "company_number": "09952199",
+      "company_name": "PLUM FINTECH LIMITED",
+      "filing_date": "2026-05-28",
+      "filing_type": "SH01",
+      "summary": "PLUM FINTECH LIMITED (09952199): Shares allotted on 2026-05-28. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-05-29"
     }
   ],
   "known_filings": [
@@ -878,6 +878,12 @@
       "filing_date": "2026-05-27",
       "filing_type": "SH06",
       "description": "capital-cancellation-shares"
+    },
+    {
+      "company_number": "09952199",
+      "filing_date": "2026-05-28",
+      "filing_type": "SH01",
+      "description": "capital-allotment-shares"
     }
   ]
 }

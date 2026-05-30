@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-05-25",
-      "alerts_sent_this_week": 6
+      "alerts_sent_this_week": 8
     }
   },
   "watched_companies": {},
@@ -34,6 +34,12 @@
     },
     "06426485": {
       "name": "RIGHTMOVE PLC"
+    },
+    "09498559": {
+      "name": "BY MILES LTD"
+    },
+    "10185006": {
+      "name": "GRAPHCORE LIMITED"
     }
   },
   "watchlists": {
@@ -358,14 +364,6 @@
     {
       "company_number": "09952199",
       "company_name": "PLUM FINTECH LIMITED",
-      "filing_date": "2026-05-21",
-      "filing_type": "SH01",
-      "summary": "PLUM FINTECH LIMITED (09952199): Shares allotted on 2026-05-21. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
-      "summary_date": "2026-05-22"
-    },
-    {
-      "company_number": "09952199",
-      "company_name": "PLUM FINTECH LIMITED",
       "filing_date": "2026-05-22",
       "filing_type": "RESOLUTIONS",
       "summary": "PLUM FINTECH LIMITED (09952199): Resolution on 2026-05-22. Filing type: RESOLUTIONS.",
@@ -426,6 +424,22 @@
       "filing_type": "SH01",
       "summary": "PLUM FINTECH LIMITED (09952199): Shares allotted on 2026-05-28. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
       "summary_date": "2026-05-29"
+    },
+    {
+      "company_number": "09498559",
+      "company_name": "BY MILES LTD",
+      "filing_date": "2026-05-29",
+      "filing_type": "AD01",
+      "summary": "BY MILES LTD (09498559): Address changed on 2026-05-29. \ud83d\udccc Registered office moved. Could be growth, cost-cutting, or red flag if moving to a PO box.",
+      "summary_date": "2026-05-30"
+    },
+    {
+      "company_number": "10185006",
+      "company_name": "GRAPHCORE LIMITED",
+      "filing_date": "2026-05-29",
+      "filing_type": "SH01",
+      "summary": "GRAPHCORE LIMITED (10185006): Shares allotted on 2026-05-29. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-05-30"
     }
   ],
   "known_filings": [
@@ -882,6 +896,18 @@
     {
       "company_number": "09952199",
       "filing_date": "2026-05-28",
+      "filing_type": "SH01",
+      "description": "capital-allotment-shares"
+    },
+    {
+      "company_number": "09498559",
+      "filing_date": "2026-05-29",
+      "filing_type": "AD01",
+      "description": "change-registered-office-address-company-with-date-old-address-new-address"
+    },
+    {
+      "company_number": "10185006",
+      "filing_date": "2026-05-29",
       "filing_type": "SH01",
       "description": "capital-allotment-shares"
     }

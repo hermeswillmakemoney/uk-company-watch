@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-01",
-      "alerts_sent_this_week": 3
+      "alerts_sent_this_week": 4
     }
   },
   "watched_companies": {},
@@ -40,6 +40,9 @@
     },
     "10185006": {
       "name": "GRAPHCORE LIMITED"
+    },
+    "14695368": {
+      "name": "ZEGO LTD"
     }
   },
   "watchlists": {
@@ -448,6 +451,14 @@
       "filing_type": "RESOLUTIONS",
       "summary": "RIGHTMOVE PLC (06426485): Resolution on 2026-06-01. Filing type: RESOLUTIONS.",
       "summary_date": "2026-06-02"
+    },
+    {
+      "company_number": "14695368",
+      "company_name": "ZEGO LTD",
+      "filing_date": "2026-06-09",
+      "filing_type": "GAZ1",
+      "summary": "ZEGO LTD (14695368): Gazette notice on 2026-06-09. \ud83d\udccc Published in the London Gazette \u2014 often relates to insolvency or strike-off proceedings.",
+      "summary_date": "2026-06-03"
     }
   ],
   "known_filings": [
@@ -936,6 +947,12 @@
       "filing_date": "2026-06-01",
       "filing_type": "RESOLUTIONS",
       "description": "resolution"
+    },
+    {
+      "company_number": "14695368",
+      "filing_date": "2026-06-09",
+      "filing_type": "GAZ1",
+      "description": "gazette-notice-compulsory"
     }
   ]
 }

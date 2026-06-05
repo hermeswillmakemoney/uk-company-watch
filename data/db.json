@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-01",
-      "alerts_sent_this_week": 4
+      "alerts_sent_this_week": 7
     }
   },
   "watched_companies": {},
@@ -43,6 +43,12 @@
     },
     "14695368": {
       "name": "ZEGO LTD"
+    },
+    "08907985": {
+      "name": "CUVVA LIMITED"
+    },
+    "03223028": {
+      "name": "AMAZON UK SERVICES LTD."
     }
   },
   "watchlists": {
@@ -365,30 +371,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "OC305934",
-      "company_name": "KNIGHT FRANK LLP",
-      "filing_date": "2026-05-27",
-      "filing_type": "LLTM01",
-      "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-05-27. Filing type: LLTM01.",
-      "summary_date": "2026-05-28"
-    },
-    {
-      "company_number": "11726983",
-      "company_name": "MOLO LTD",
-      "filing_date": "2026-05-27",
-      "filing_type": "CS01",
-      "summary": "MOLO LTD (11726983): Confirmation statement on 2026-05-27. Annual compliance filing. Confirms company details are current.",
-      "summary_date": "2026-05-28"
-    },
-    {
-      "company_number": "06426485",
-      "company_name": "RIGHTMOVE PLC",
-      "filing_date": "2026-05-27",
-      "filing_type": "SH06",
-      "summary": "RIGHTMOVE PLC (06426485): Shares allotted on 2026-05-27. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
-      "summary_date": "2026-05-28"
-    },
-    {
       "company_number": "09952199",
       "company_name": "PLUM FINTECH LIMITED",
       "filing_date": "2026-05-28",
@@ -443,6 +425,30 @@
       "filing_type": "GAZ1",
       "summary": "ZEGO LTD (14695368): Gazette notice on 2026-06-09. \ud83d\udccc Published in the London Gazette \u2014 often relates to insolvency or strike-off proceedings.",
       "summary_date": "2026-06-03"
+    },
+    {
+      "company_number": "08907985",
+      "company_name": "CUVVA LIMITED",
+      "filing_date": "2026-06-04",
+      "filing_type": "SH19",
+      "summary": "CUVVA LIMITED (08907985): Capital Statement Capital Company With Date Currency Figure on 2026-06-04. Filing type: SH19.",
+      "summary_date": "2026-06-05"
+    },
+    {
+      "company_number": "13211214",
+      "company_name": "WISE LIMITED",
+      "filing_date": "2026-06-04",
+      "filing_type": "CS01",
+      "summary": "WISE LIMITED (13211214): Confirmation statement on 2026-06-04. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-06-05"
+    },
+    {
+      "company_number": "03223028",
+      "company_name": "AMAZON UK SERVICES LTD.",
+      "filing_date": "2026-06-04",
+      "filing_type": "AA",
+      "summary": "AMAZON UK SERVICES LTD. (03223028): Accounts on 2026-06-04. Annual accounts filed.",
+      "summary_date": "2026-06-05"
     }
   ],
   "known_filings": [
@@ -937,6 +943,24 @@
       "filing_date": "2026-06-09",
       "filing_type": "GAZ1",
       "description": "gazette-notice-compulsory"
+    },
+    {
+      "company_number": "08907985",
+      "filing_date": "2026-06-04",
+      "filing_type": "SH19",
+      "description": "capital-statement-capital-company-with-date-currency-figure"
+    },
+    {
+      "company_number": "13211214",
+      "filing_date": "2026-06-04",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "03223028",
+      "filing_date": "2026-06-04",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-full"
     }
   ]
 }

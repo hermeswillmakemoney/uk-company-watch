@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-01",
-      "alerts_sent_this_week": 7
+      "alerts_sent_this_week": 9
     }
   },
   "watched_companies": {},
@@ -49,6 +49,9 @@
     },
     "03223028": {
       "name": "AMAZON UK SERVICES LTD."
+    },
+    "08157033": {
+      "name": "BITSTAMP LIMITED"
     }
   },
   "watchlists": {
@@ -371,14 +374,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "09952199",
-      "company_name": "PLUM FINTECH LIMITED",
-      "filing_date": "2026-05-28",
-      "filing_type": "SH01",
-      "summary": "PLUM FINTECH LIMITED (09952199): Shares allotted on 2026-05-28. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
-      "summary_date": "2026-05-29"
-    },
-    {
       "company_number": "09498559",
       "company_name": "BY MILES LTD",
       "filing_date": "2026-05-29",
@@ -449,6 +444,22 @@
       "filing_type": "AA",
       "summary": "AMAZON UK SERVICES LTD. (03223028): Accounts on 2026-06-04. Annual accounts filed.",
       "summary_date": "2026-06-05"
+    },
+    {
+      "company_number": "08157033",
+      "company_name": "BITSTAMP LIMITED",
+      "filing_date": "2026-06-06",
+      "filing_type": "RESOLUTIONS",
+      "summary": "BITSTAMP LIMITED (08157033): Resolution on 2026-06-06. Filing type: RESOLUTIONS.",
+      "summary_date": "2026-06-06"
+    },
+    {
+      "company_number": "OC305934",
+      "company_name": "KNIGHT FRANK LLP",
+      "filing_date": "2026-06-05",
+      "filing_type": "LLTM01",
+      "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-06-05. Filing type: LLTM01.",
+      "summary_date": "2026-06-06"
     }
   ],
   "known_filings": [
@@ -961,6 +972,18 @@
       "filing_date": "2026-06-04",
       "filing_type": "AA",
       "description": "accounts-with-accounts-type-full"
+    },
+    {
+      "company_number": "08157033",
+      "filing_date": "2026-06-06",
+      "filing_type": "RESOLUTIONS",
+      "description": "resolution"
+    },
+    {
+      "company_number": "OC305934",
+      "filing_date": "2026-06-05",
+      "filing_type": "LLTM01",
+      "description": "termination-member-limited-liability-partnership-with-name-termination-date"
     }
   ]
 }

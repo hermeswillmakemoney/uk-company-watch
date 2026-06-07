@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-01",
-      "alerts_sent_this_week": 9
+      "alerts_sent_this_week": 10
     }
   },
   "watched_companies": {},
@@ -374,22 +374,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "09498559",
-      "company_name": "BY MILES LTD",
-      "filing_date": "2026-05-29",
-      "filing_type": "AD01",
-      "summary": "BY MILES LTD (09498559): Address changed on 2026-05-29. \ud83d\udccc Registered office moved. Could be growth, cost-cutting, or red flag if moving to a PO box.",
-      "summary_date": "2026-05-30"
-    },
-    {
-      "company_number": "10185006",
-      "company_name": "GRAPHCORE LIMITED",
-      "filing_date": "2026-05-29",
-      "filing_type": "SH01",
-      "summary": "GRAPHCORE LIMITED (10185006): Shares allotted on 2026-05-29. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
-      "summary_date": "2026-05-30"
-    },
-    {
       "company_number": "02122174",
       "company_name": "SAVILLS PLC",
       "filing_date": "2026-06-01",
@@ -460,6 +444,14 @@
       "filing_type": "LLTM01",
       "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-06-05. Filing type: LLTM01.",
       "summary_date": "2026-06-06"
+    },
+    {
+      "company_number": "06426485",
+      "company_name": "RIGHTMOVE PLC",
+      "filing_date": "2026-06-06",
+      "filing_type": "SH06",
+      "summary": "RIGHTMOVE PLC (06426485): Shares allotted on 2026-06-06. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-06-07"
     }
   ],
   "known_filings": [
@@ -984,6 +976,12 @@
       "filing_date": "2026-06-05",
       "filing_type": "LLTM01",
       "description": "termination-member-limited-liability-partnership-with-name-termination-date"
+    },
+    {
+      "company_number": "06426485",
+      "filing_date": "2026-06-06",
+      "filing_type": "SH06",
+      "description": "capital-cancellation-shares"
     }
   ]
 }

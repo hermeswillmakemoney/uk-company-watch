@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-08",
-      "alerts_sent_this_week": 1
+      "alerts_sent_this_week": 3
     }
   },
   "watched_companies": {},
@@ -460,6 +460,22 @@
       "filing_type": "AA",
       "summary": "SAVILLS PLC (02122174): Accounts on 2026-06-07. Annual accounts filed.",
       "summary_date": "2026-06-08"
+    },
+    {
+      "company_number": "10185006",
+      "company_name": "GRAPHCORE LIMITED",
+      "filing_date": "2026-06-08",
+      "filing_type": "RESOLUTIONS",
+      "summary": "GRAPHCORE LIMITED (10185006): Resolution on 2026-06-08. Filing type: RESOLUTIONS.",
+      "summary_date": "2026-06-09"
+    },
+    {
+      "company_number": "02122174",
+      "company_name": "SAVILLS PLC",
+      "filing_date": "2026-06-09",
+      "filing_type": "RESOLUTIONS",
+      "summary": "SAVILLS PLC (02122174): Resolution on 2026-06-09. Filing type: RESOLUTIONS.",
+      "summary_date": "2026-06-09"
     }
   ],
   "known_filings": [
@@ -996,6 +1012,18 @@
       "filing_date": "2026-06-07",
       "filing_type": "AA",
       "description": "accounts-with-accounts-type-group"
+    },
+    {
+      "company_number": "10185006",
+      "filing_date": "2026-06-08",
+      "filing_type": "RESOLUTIONS",
+      "description": "resolution"
+    },
+    {
+      "company_number": "02122174",
+      "filing_date": "2026-06-09",
+      "filing_type": "RESOLUTIONS",
+      "description": "resolution"
     }
   ]
 }

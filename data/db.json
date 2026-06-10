@@ -374,30 +374,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "02122174",
-      "company_name": "SAVILLS PLC",
-      "filing_date": "2026-06-01",
-      "filing_type": "CS01",
-      "summary": "SAVILLS PLC (02122174): Confirmation statement on 2026-06-01. Annual compliance filing. Confirms company details are current.",
-      "summary_date": "2026-06-02"
-    },
-    {
-      "company_number": "13211214",
-      "company_name": "WISE LIMITED",
-      "filing_date": "2026-06-01",
-      "filing_type": "SH02",
-      "summary": "WISE LIMITED (13211214): Shares allotted on 2026-06-01. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
-      "summary_date": "2026-06-02"
-    },
-    {
-      "company_number": "06426485",
-      "company_name": "RIGHTMOVE PLC",
-      "filing_date": "2026-06-01",
-      "filing_type": "RESOLUTIONS",
-      "summary": "RIGHTMOVE PLC (06426485): Resolution on 2026-06-01. Filing type: RESOLUTIONS.",
-      "summary_date": "2026-06-02"
-    },
-    {
       "company_number": "14695368",
       "company_name": "ZEGO LTD",
       "filing_date": "2026-06-09",

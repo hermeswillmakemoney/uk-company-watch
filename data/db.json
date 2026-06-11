@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-08",
-      "alerts_sent_this_week": 3
+      "alerts_sent_this_week": 4
     }
   },
   "watched_companies": {},
@@ -52,6 +52,9 @@
     },
     "08157033": {
       "name": "BITSTAMP LIMITED"
+    },
+    "10887621": {
+      "name": "ONTHEMARKET LIMITED"
     }
   },
   "watchlists": {
@@ -374,14 +377,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "14695368",
-      "company_name": "ZEGO LTD",
-      "filing_date": "2026-06-09",
-      "filing_type": "GAZ1",
-      "summary": "ZEGO LTD (14695368): Gazette notice on 2026-06-09. \ud83d\udccc Published in the London Gazette \u2014 often relates to insolvency or strike-off proceedings.",
-      "summary_date": "2026-06-03"
-    },
-    {
       "company_number": "08907985",
       "company_name": "CUVVA LIMITED",
       "filing_date": "2026-06-04",
@@ -452,6 +447,14 @@
       "filing_type": "RESOLUTIONS",
       "summary": "SAVILLS PLC (02122174): Resolution on 2026-06-09. Filing type: RESOLUTIONS.",
       "summary_date": "2026-06-09"
+    },
+    {
+      "company_number": "10887621",
+      "company_name": "ONTHEMARKET LIMITED",
+      "filing_date": "2026-06-10",
+      "filing_type": "TM01",
+      "summary": "ONTHEMARKET LIMITED (10887621): Director terminated on 2026-06-10. \ud83d\udccc A director's appointment was formally ended.",
+      "summary_date": "2026-06-11"
     }
   ],
   "known_filings": [
@@ -1000,6 +1003,12 @@
       "filing_date": "2026-06-09",
       "filing_type": "RESOLUTIONS",
       "description": "resolution"
+    },
+    {
+      "company_number": "10887621",
+      "filing_date": "2026-06-10",
+      "filing_type": "TM01",
+      "description": "termination-director-company-with-name-termination-date"
     }
   ]
 }

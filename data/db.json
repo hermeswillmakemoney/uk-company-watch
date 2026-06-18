@@ -8,8 +8,8 @@
       "stripe_subscription_id": null,
       "stripe_customer_id": null,
       "subscription_status": "active",
-      "alert_week_start": "2026-06-08",
-      "alerts_sent_this_week": 4
+      "alert_week_start": "2026-06-15",
+      "alerts_sent_this_week": 2
     }
   },
   "watched_companies": {},
@@ -55,6 +55,12 @@
     },
     "10887621": {
       "name": "ONTHEMARKET LIMITED"
+    },
+    "13264637": {
+      "name": "DARKTRACE LIMITED"
+    },
+    "06776852": {
+      "name": "WAYFAIR (UK) LIMITED"
     }
   },
   "watchlists": {
@@ -383,6 +389,22 @@
       "filing_type": "TM01",
       "summary": "ONTHEMARKET LIMITED (10887621): Director terminated on 2026-06-10. \ud83d\udccc A director's appointment was formally ended.",
       "summary_date": "2026-06-11"
+    },
+    {
+      "company_number": "13264637",
+      "company_name": "DARKTRACE LIMITED",
+      "filing_date": "2026-06-17",
+      "filing_type": "SH19",
+      "summary": "DARKTRACE LIMITED (13264637): Capital Statement Capital Company With Date Currency Figure on 2026-06-17. Filing type: SH19.",
+      "summary_date": "2026-06-18"
+    },
+    {
+      "company_number": "06776852",
+      "company_name": "WAYFAIR (UK) LIMITED",
+      "filing_date": "2026-06-17",
+      "filing_type": "CH01",
+      "summary": "WAYFAIR (UK) LIMITED (06776852): Director details changed on 2026-06-17. Director's recorded details updated.",
+      "summary_date": "2026-06-18"
     }
   ],
   "known_filings": [
@@ -937,6 +959,18 @@
       "filing_date": "2026-06-10",
       "filing_type": "TM01",
       "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "13264637",
+      "filing_date": "2026-06-17",
+      "filing_type": "SH19",
+      "description": "capital-statement-capital-company-with-date-currency-figure"
+    },
+    {
+      "company_number": "06776852",
+      "filing_date": "2026-06-17",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
     }
   ]
 }

@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-15",
-      "alerts_sent_this_week": 2
+      "alerts_sent_this_week": 4
     }
   },
   "watched_companies": {},
@@ -61,6 +61,9 @@
     },
     "06776852": {
       "name": "WAYFAIR (UK) LIMITED"
+    },
+    "09092149": {
+      "name": "STARLING BANK LIMITED"
     }
   },
   "watchlists": {
@@ -383,14 +386,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "10887621",
-      "company_name": "ONTHEMARKET LIMITED",
-      "filing_date": "2026-06-10",
-      "filing_type": "TM01",
-      "summary": "ONTHEMARKET LIMITED (10887621): Director terminated on 2026-06-10. \ud83d\udccc A director's appointment was formally ended.",
-      "summary_date": "2026-06-11"
-    },
-    {
       "company_number": "13264637",
       "company_name": "DARKTRACE LIMITED",
       "filing_date": "2026-06-17",
@@ -405,6 +400,22 @@
       "filing_type": "CH01",
       "summary": "WAYFAIR (UK) LIMITED (06776852): Director details changed on 2026-06-17. Director's recorded details updated.",
       "summary_date": "2026-06-18"
+    },
+    {
+      "company_number": "09092149",
+      "company_name": "STARLING BANK LIMITED",
+      "filing_date": "2026-06-18",
+      "filing_type": "TM01",
+      "summary": "STARLING BANK LIMITED (09092149): Director terminated on 2026-06-18. \ud83d\udccc A director's appointment was formally ended.",
+      "summary_date": "2026-06-19"
+    },
+    {
+      "company_number": "09952199",
+      "company_name": "PLUM FINTECH LIMITED",
+      "filing_date": "2026-06-18",
+      "filing_type": "CH01",
+      "summary": "PLUM FINTECH LIMITED (09952199): Director details changed on 2026-06-18. Director's recorded details updated.",
+      "summary_date": "2026-06-19"
     }
   ],
   "known_filings": [
@@ -969,6 +980,18 @@
     {
       "company_number": "06776852",
       "filing_date": "2026-06-17",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
+    },
+    {
+      "company_number": "09092149",
+      "filing_date": "2026-06-18",
+      "filing_type": "TM01",
+      "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "09952199",
+      "filing_date": "2026-06-18",
       "filing_type": "CH01",
       "description": "change-person-director-company-with-change-date"
     }

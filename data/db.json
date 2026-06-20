@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-15",
-      "alerts_sent_this_week": 4
+      "alerts_sent_this_week": 5
     }
   },
   "watched_companies": {},
@@ -416,6 +416,14 @@
       "filing_type": "CH01",
       "summary": "PLUM FINTECH LIMITED (09952199): Director details changed on 2026-06-18. Director's recorded details updated.",
       "summary_date": "2026-06-19"
+    },
+    {
+      "company_number": "13211214",
+      "company_name": "WISE LIMITED",
+      "filing_date": "2026-06-19",
+      "filing_type": "PSC02",
+      "summary": "WISE LIMITED (13211214): PSC update on 2026-06-19. \ud83d\udccc Person with Significant Control changed \u2014 ultimate ownership may have shifted.",
+      "summary_date": "2026-06-20"
     }
   ],
   "known_filings": [
@@ -994,6 +1002,12 @@
       "filing_date": "2026-06-18",
       "filing_type": "CH01",
       "description": "change-person-director-company-with-change-date"
+    },
+    {
+      "company_number": "13211214",
+      "filing_date": "2026-06-19",
+      "filing_type": "PSC02",
+      "description": "notification-of-a-person-with-significant-control"
     }
   ]
 }

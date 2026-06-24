@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-22",
-      "alerts_sent_this_week": 2
+      "alerts_sent_this_week": 4
     }
   },
   "watched_companies": {},
@@ -446,6 +446,22 @@
       "filing_type": "AA",
       "summary": "HUGGING AUTO LIMITED (16465668): Accounts on 2026-06-23. Annual accounts filed.",
       "summary_date": "2026-06-23"
+    },
+    {
+      "company_number": "13264637",
+      "company_name": "DARKTRACE LIMITED",
+      "filing_date": "2026-06-23",
+      "filing_type": "AP01",
+      "summary": "DARKTRACE LIMITED (13264637): Director appointed on 2026-06-23. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
+      "summary_date": "2026-06-24"
+    },
+    {
+      "company_number": "06426485",
+      "company_name": "RIGHTMOVE PLC",
+      "filing_date": "2026-06-23",
+      "filing_type": "AA",
+      "summary": "RIGHTMOVE PLC (06426485): Accounts on 2026-06-23. Annual accounts filed.",
+      "summary_date": "2026-06-24"
     }
   ],
   "known_filings": [
@@ -1042,6 +1058,18 @@
       "filing_date": "2026-06-23",
       "filing_type": "AA",
       "description": "accounts-with-accounts-type-dormant"
+    },
+    {
+      "company_number": "13264637",
+      "filing_date": "2026-06-23",
+      "filing_type": "AP01",
+      "description": "appoint-person-director-company-with-name-date"
+    },
+    {
+      "company_number": "06426485",
+      "filing_date": "2026-06-23",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-group"
     }
   ]
 }

@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-22",
-      "alerts_sent_this_week": 8
+      "alerts_sent_this_week": 11
     }
   },
   "watched_companies": {},
@@ -73,6 +73,9 @@
     },
     "10487576": {
       "name": "FLATFAIR LIMITED"
+    },
+    "08632552": {
+      "name": "ATOM BANK PLC"
     }
   },
   "watchlists": {
@@ -395,22 +398,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "13264637",
-      "company_name": "DARKTRACE LIMITED",
-      "filing_date": "2026-06-17",
-      "filing_type": "SH19",
-      "summary": "DARKTRACE LIMITED (13264637): Capital Statement Capital Company With Date Currency Figure on 2026-06-17. Filing type: SH19.",
-      "summary_date": "2026-06-18"
-    },
-    {
-      "company_number": "06776852",
-      "company_name": "WAYFAIR (UK) LIMITED",
-      "filing_date": "2026-06-17",
-      "filing_type": "CH01",
-      "summary": "WAYFAIR (UK) LIMITED (06776852): Director details changed on 2026-06-17. Director's recorded details updated.",
-      "summary_date": "2026-06-18"
-    },
-    {
       "company_number": "09092149",
       "company_name": "STARLING BANK LIMITED",
       "filing_date": "2026-06-18",
@@ -497,6 +484,30 @@
       "filing_type": "RP01CS01",
       "summary": "DARKTRACE LIMITED (13264637): Replacement Filing Of Confirmation Statement With Made Up Date on 2026-06-24. Filing type: RP01CS01.",
       "summary_date": "2026-06-25"
+    },
+    {
+      "company_number": "08632552",
+      "company_name": "ATOM BANK PLC",
+      "filing_date": "2026-06-25",
+      "filing_type": "CS01",
+      "summary": "ATOM BANK PLC (08632552): Confirmation statement on 2026-06-25. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-06-26"
+    },
+    {
+      "company_number": "13264637",
+      "company_name": "DARKTRACE LIMITED",
+      "filing_date": "2026-06-25",
+      "filing_type": "CAP-SS",
+      "summary": "DARKTRACE LIMITED (13264637): Legacy on 2026-06-25. Filing type: CAP-SS.",
+      "summary_date": "2026-06-26"
+    },
+    {
+      "company_number": "09365669",
+      "company_name": "OPEN INSURANCE SERVICES UK LIMITED",
+      "filing_date": "2026-06-25",
+      "filing_type": "CH01",
+      "summary": "OPEN INSURANCE SERVICES UK LIMITED (09365669): Director details changed on 2026-06-25. Director's recorded details updated.",
+      "summary_date": "2026-06-26"
     }
   ],
   "known_filings": [
@@ -1129,6 +1140,24 @@
       "filing_date": "2026-06-24",
       "filing_type": "RP01CS01",
       "description": "replacement-filing-of-confirmation-statement-with-made-up-date"
+    },
+    {
+      "company_number": "08632552",
+      "filing_date": "2026-06-25",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
+    },
+    {
+      "company_number": "13264637",
+      "filing_date": "2026-06-25",
+      "filing_type": "CAP-SS",
+      "description": "legacy"
+    },
+    {
+      "company_number": "09365669",
+      "filing_date": "2026-06-25",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
     }
   ]
 }

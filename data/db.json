@@ -8,8 +8,8 @@
       "stripe_subscription_id": null,
       "stripe_customer_id": null,
       "subscription_status": "active",
-      "alert_week_start": "2026-06-22",
-      "alerts_sent_this_week": 12
+      "alert_week_start": "2026-06-29",
+      "alerts_sent_this_week": 1
     }
   },
   "watched_companies": {},
@@ -76,6 +76,9 @@
     },
     "08632552": {
       "name": "ATOM BANK PLC"
+    },
+    "SC709218": {
+      "name": "WOMBAT LIMITED"
     }
   },
   "watchlists": {
@@ -492,6 +495,14 @@
       "filing_type": "TM01",
       "summary": "STARLING BANK LIMITED (09092149): Director terminated on 2026-06-26. \ud83d\udccc A director's appointment was formally ended.",
       "summary_date": "2026-06-27"
+    },
+    {
+      "company_number": "SC709218",
+      "company_name": "WOMBAT LIMITED",
+      "filing_date": "2026-06-28",
+      "filing_type": "AA",
+      "summary": "WOMBAT LIMITED (SC709218): Accounts on 2026-06-28. Annual accounts filed.",
+      "summary_date": "2026-06-29"
     }
   ],
   "known_filings": [
@@ -1148,6 +1159,12 @@
       "filing_date": "2026-06-26",
       "filing_type": "TM01",
       "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "SC709218",
+      "filing_date": "2026-06-28",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-micro-entity"
     }
   ]
 }

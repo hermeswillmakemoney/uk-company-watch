@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-29",
-      "alerts_sent_this_week": 1
+      "alerts_sent_this_week": 2
     }
   },
   "watched_companies": {},
@@ -79,6 +79,9 @@
     },
     "SC709218": {
       "name": "WOMBAT LIMITED"
+    },
+    "11434241": {
+      "name": "CHAINALYSIS UK LIMITED"
     }
   },
   "watchlists": {
@@ -503,6 +506,14 @@
       "filing_type": "AA",
       "summary": "WOMBAT LIMITED (SC709218): Accounts on 2026-06-28. Annual accounts filed.",
       "summary_date": "2026-06-29"
+    },
+    {
+      "company_number": "11434241",
+      "company_name": "CHAINALYSIS UK LIMITED",
+      "filing_date": "2026-06-29",
+      "filing_type": "CS01",
+      "summary": "CHAINALYSIS UK LIMITED (11434241): Confirmation statement on 2026-06-29. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-06-30"
     }
   ],
   "known_filings": [
@@ -1165,6 +1176,12 @@
       "filing_date": "2026-06-28",
       "filing_type": "AA",
       "description": "accounts-with-accounts-type-micro-entity"
+    },
+    {
+      "company_number": "11434241",
+      "filing_date": "2026-06-29",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
     }
   ]
 }

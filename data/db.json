@@ -407,38 +407,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "10487576",
-      "company_name": "FLATFAIR LIMITED",
-      "filing_date": "2026-06-24",
-      "filing_type": "AA",
-      "summary": "FLATFAIR LIMITED (10487576): Accounts on 2026-06-24. Annual accounts filed.",
-      "summary_date": "2026-06-25"
-    },
-    {
-      "company_number": "08157033",
-      "company_name": "BITSTAMP LIMITED",
-      "filing_date": "2026-06-24",
-      "filing_type": "SH01",
-      "summary": "BITSTAMP LIMITED (08157033): Shares allotted on 2026-06-24. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
-      "summary_date": "2026-06-25"
-    },
-    {
-      "company_number": "OC305934",
-      "company_name": "KNIGHT FRANK LLP",
-      "filing_date": "2026-06-24",
-      "filing_type": "LLTM01",
-      "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-06-24. Filing type: LLTM01.",
-      "summary_date": "2026-06-25"
-    },
-    {
-      "company_number": "13264637",
-      "company_name": "DARKTRACE LIMITED",
-      "filing_date": "2026-06-24",
-      "filing_type": "RP01CS01",
-      "summary": "DARKTRACE LIMITED (13264637): Replacement Filing Of Confirmation Statement With Made Up Date on 2026-06-24. Filing type: RP01CS01.",
-      "summary_date": "2026-06-25"
-    },
-    {
       "company_number": "08632552",
       "company_name": "ATOM BANK PLC",
       "filing_date": "2026-06-25",

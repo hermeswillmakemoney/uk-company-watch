@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-29",
-      "alerts_sent_this_week": 6
+      "alerts_sent_this_week": 9
     }
   },
   "watched_companies": {},
@@ -85,6 +85,9 @@
     },
     "10575209": {
       "name": "LAKA LTD"
+    },
+    "08624700": {
+      "name": "DEAD HAPPY LIMITED"
     }
   },
   "watchlists": {
@@ -407,30 +410,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "08632552",
-      "company_name": "ATOM BANK PLC",
-      "filing_date": "2026-06-25",
-      "filing_type": "CS01",
-      "summary": "ATOM BANK PLC (08632552): Confirmation statement on 2026-06-25. Annual compliance filing. Confirms company details are current.",
-      "summary_date": "2026-06-26"
-    },
-    {
-      "company_number": "13264637",
-      "company_name": "DARKTRACE LIMITED",
-      "filing_date": "2026-06-25",
-      "filing_type": "CAP-SS",
-      "summary": "DARKTRACE LIMITED (13264637): Legacy on 2026-06-25. Filing type: CAP-SS.",
-      "summary_date": "2026-06-26"
-    },
-    {
-      "company_number": "09365669",
-      "company_name": "OPEN INSURANCE SERVICES UK LIMITED",
-      "filing_date": "2026-06-25",
-      "filing_type": "CH01",
-      "summary": "OPEN INSURANCE SERVICES UK LIMITED (09365669): Director details changed on 2026-06-25. Director's recorded details updated.",
-      "summary_date": "2026-06-26"
-    },
-    {
       "company_number": "09092149",
       "company_name": "STARLING BANK LIMITED",
       "filing_date": "2026-06-26",
@@ -485,6 +464,30 @@
       "filing_type": "AD01",
       "summary": "LAKA LTD (10575209): Address changed on 2026-07-01. \ud83d\udccc Registered office moved. Could be growth, cost-cutting, or red flag if moving to a PO box.",
       "summary_date": "2026-07-02"
+    },
+    {
+      "company_number": "08624700",
+      "company_name": "DEAD HAPPY LIMITED",
+      "filing_date": "2026-07-03",
+      "filing_type": "AM23",
+      "summary": "DEAD HAPPY LIMITED (08624700): Liquidation In Administration Move To Dissolution on 2026-07-03. Filing type: AM23.",
+      "summary_date": "2026-07-04"
+    },
+    {
+      "company_number": "09498559",
+      "company_name": "BY MILES LTD",
+      "filing_date": "2026-07-03",
+      "filing_type": "CH01",
+      "summary": "BY MILES LTD (09498559): Director details changed on 2026-07-03. Director's recorded details updated.",
+      "summary_date": "2026-07-04"
+    },
+    {
+      "company_number": "09092149",
+      "company_name": "STARLING BANK LIMITED",
+      "filing_date": "2026-07-03",
+      "filing_type": "TM01",
+      "summary": "STARLING BANK LIMITED (09092149): Director terminated on 2026-07-03. \ud83d\udccc A director's appointment was formally ended.",
+      "summary_date": "2026-07-04"
     }
   ],
   "known_filings": [
@@ -1177,6 +1180,24 @@
       "filing_date": "2026-07-01",
       "filing_type": "AD01",
       "description": "change-registered-office-address-company-with-date-old-address-new-address"
+    },
+    {
+      "company_number": "08624700",
+      "filing_date": "2026-07-03",
+      "filing_type": "AM23",
+      "description": "liquidation-in-administration-move-to-dissolution"
+    },
+    {
+      "company_number": "09498559",
+      "filing_date": "2026-07-03",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
+    },
+    {
+      "company_number": "09092149",
+      "filing_date": "2026-07-03",
+      "filing_type": "TM01",
+      "description": "termination-director-company-with-name-termination-date"
     }
   ]
 }

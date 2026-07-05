@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-06-29",
-      "alerts_sent_this_week": 9
+      "alerts_sent_this_week": 10
     }
   },
   "watched_companies": {},
@@ -410,14 +410,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "09092149",
-      "company_name": "STARLING BANK LIMITED",
-      "filing_date": "2026-06-26",
-      "filing_type": "TM01",
-      "summary": "STARLING BANK LIMITED (09092149): Director terminated on 2026-06-26. \ud83d\udccc A director's appointment was formally ended.",
-      "summary_date": "2026-06-27"
-    },
-    {
       "company_number": "SC709218",
       "company_name": "WOMBAT LIMITED",
       "filing_date": "2026-06-28",
@@ -488,6 +480,14 @@
       "filing_type": "TM01",
       "summary": "STARLING BANK LIMITED (09092149): Director terminated on 2026-07-03. \ud83d\udccc A director's appointment was formally ended.",
       "summary_date": "2026-07-04"
+    },
+    {
+      "company_number": "08157033",
+      "company_name": "BITSTAMP LIMITED",
+      "filing_date": "2026-07-04",
+      "filing_type": "RESOLUTIONS",
+      "summary": "BITSTAMP LIMITED (08157033): Resolution on 2026-07-04. Filing type: RESOLUTIONS.",
+      "summary_date": "2026-07-05"
     }
   ],
   "known_filings": [
@@ -1198,6 +1198,12 @@
       "filing_date": "2026-07-03",
       "filing_type": "TM01",
       "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "08157033",
+      "filing_date": "2026-07-04",
+      "filing_type": "RESOLUTIONS",
+      "description": "resolution"
     }
   ]
 }

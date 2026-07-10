@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-06",
-      "alerts_sent_this_week": 4
+      "alerts_sent_this_week": 5
     }
   },
   "watched_companies": {},
@@ -413,22 +413,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "OC305934",
-      "company_name": "KNIGHT FRANK LLP",
-      "filing_date": "2026-07-01",
-      "filing_type": "LLCH01",
-      "summary": "KNIGHT FRANK LLP (OC305934): Change Person Member Limited Liability Partnership With Name Change Date on 2026-07-01. Filing type: LLCH01.",
-      "summary_date": "2026-07-02"
-    },
-    {
-      "company_number": "10575209",
-      "company_name": "LAKA LTD",
-      "filing_date": "2026-07-01",
-      "filing_type": "AD01",
-      "summary": "LAKA LTD (10575209): Address changed on 2026-07-01. \ud83d\udccc Registered office moved. Could be growth, cost-cutting, or red flag if moving to a PO box.",
-      "summary_date": "2026-07-02"
-    },
-    {
       "company_number": "08624700",
       "company_name": "DEAD HAPPY LIMITED",
       "filing_date": "2026-07-03",
@@ -491,6 +475,14 @@
       "filing_type": "CS01",
       "summary": "BOUGHT BY MANY LTD (12735852): Confirmation statement on 2026-07-09. Annual compliance filing. Confirms company details are current.",
       "summary_date": "2026-07-09"
+    },
+    {
+      "company_number": "09092149",
+      "company_name": "STARLING BANK LIMITED",
+      "filing_date": "2026-07-09",
+      "filing_type": "MR04",
+      "summary": "STARLING BANK LIMITED (09092149): Mortgage satisfied on 2026-07-09. A previous mortgage/charge has been paid off and released.",
+      "summary_date": "2026-07-10"
     }
   ],
   "known_filings": [
@@ -1231,6 +1223,12 @@
       "filing_date": "2026-07-09",
       "filing_type": "CS01",
       "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "09092149",
+      "filing_date": "2026-07-09",
+      "filing_type": "MR04",
+      "description": "mortgage-satisfy-charge-full"
     }
   ]
 }

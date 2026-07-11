@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-06",
-      "alerts_sent_this_week": 5
+      "alerts_sent_this_week": 7
     }
   },
   "watched_companies": {},
@@ -483,6 +483,22 @@
       "filing_type": "MR04",
       "summary": "STARLING BANK LIMITED (09092149): Mortgage satisfied on 2026-07-09. A previous mortgage/charge has been paid off and released.",
       "summary_date": "2026-07-10"
+    },
+    {
+      "company_number": "13211214",
+      "company_name": "WISE LIMITED",
+      "filing_date": "2026-07-10",
+      "filing_type": "AA",
+      "summary": "WISE LIMITED (13211214): Accounts on 2026-07-10. Annual accounts filed.",
+      "summary_date": "2026-07-11"
+    },
+    {
+      "company_number": "13264637",
+      "company_name": "DARKTRACE LIMITED",
+      "filing_date": "2026-07-10",
+      "filing_type": "SH19",
+      "summary": "DARKTRACE LIMITED (13264637): Capital Statement Capital Company With Date Currency Figure on 2026-07-10. Filing type: SH19.",
+      "summary_date": "2026-07-11"
     }
   ],
   "known_filings": [
@@ -1229,6 +1245,18 @@
       "filing_date": "2026-07-09",
       "filing_type": "MR04",
       "description": "mortgage-satisfy-charge-full"
+    },
+    {
+      "company_number": "13211214",
+      "filing_date": "2026-07-10",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-group"
+    },
+    {
+      "company_number": "13264637",
+      "filing_date": "2026-07-10",
+      "filing_type": "SH19",
+      "description": "capital-statement-capital-company-with-date-currency-figure"
     }
   ]
 }

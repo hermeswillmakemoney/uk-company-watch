@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-06",
-      "alerts_sent_this_week": 7
+      "alerts_sent_this_week": 9
     }
   },
   "watched_companies": {},
@@ -91,6 +91,9 @@
     },
     "12735852": {
       "name": "BOUGHT BY MANY LTD"
+    },
+    "00955491": {
+      "name": "TANDEM BANK LIMITED"
     }
   },
   "watchlists": {
@@ -413,30 +416,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "08624700",
-      "company_name": "DEAD HAPPY LIMITED",
-      "filing_date": "2026-07-03",
-      "filing_type": "AM23",
-      "summary": "DEAD HAPPY LIMITED (08624700): Liquidation In Administration Move To Dissolution on 2026-07-03. Filing type: AM23.",
-      "summary_date": "2026-07-04"
-    },
-    {
-      "company_number": "09498559",
-      "company_name": "BY MILES LTD",
-      "filing_date": "2026-07-03",
-      "filing_type": "CH01",
-      "summary": "BY MILES LTD (09498559): Director details changed on 2026-07-03. Director's recorded details updated.",
-      "summary_date": "2026-07-04"
-    },
-    {
-      "company_number": "09092149",
-      "company_name": "STARLING BANK LIMITED",
-      "filing_date": "2026-07-03",
-      "filing_type": "TM01",
-      "summary": "STARLING BANK LIMITED (09092149): Director terminated on 2026-07-03. \ud83d\udccc A director's appointment was formally ended.",
-      "summary_date": "2026-07-04"
-    },
-    {
       "company_number": "08157033",
       "company_name": "BITSTAMP LIMITED",
       "filing_date": "2026-07-04",
@@ -499,6 +478,22 @@
       "filing_type": "SH19",
       "summary": "DARKTRACE LIMITED (13264637): Capital Statement Capital Company With Date Currency Figure on 2026-07-10. Filing type: SH19.",
       "summary_date": "2026-07-11"
+    },
+    {
+      "company_number": "00955491",
+      "company_name": "TANDEM BANK LIMITED",
+      "filing_date": "2026-07-12",
+      "filing_type": "AA",
+      "summary": "TANDEM BANK LIMITED (00955491): Accounts on 2026-07-12. Annual accounts filed.",
+      "summary_date": "2026-07-12"
+    },
+    {
+      "company_number": "09092149",
+      "company_name": "STARLING BANK LIMITED",
+      "filing_date": "2026-07-12",
+      "filing_type": "AA",
+      "summary": "STARLING BANK LIMITED (09092149): Accounts on 2026-07-12. Annual accounts filed.",
+      "summary_date": "2026-07-12"
     }
   ],
   "known_filings": [
@@ -1257,6 +1252,18 @@
       "filing_date": "2026-07-10",
       "filing_type": "SH19",
       "description": "capital-statement-capital-company-with-date-currency-figure"
+    },
+    {
+      "company_number": "00955491",
+      "filing_date": "2026-07-12",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-full"
+    },
+    {
+      "company_number": "09092149",
+      "filing_date": "2026-07-12",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-group"
     }
   ]
 }

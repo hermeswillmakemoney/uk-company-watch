@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-13",
-      "alerts_sent_this_week": 2
+      "alerts_sent_this_week": 5
     }
   },
   "watched_companies": {},
@@ -419,22 +419,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "06426485",
-      "company_name": "RIGHTMOVE PLC",
-      "filing_date": "2026-07-06",
-      "filing_type": "SH06",
-      "summary": "RIGHTMOVE PLC (06426485): Shares allotted on 2026-07-06. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
-      "summary_date": "2026-07-07"
-    },
-    {
-      "company_number": "OC305934",
-      "company_name": "KNIGHT FRANK LLP",
-      "filing_date": "2026-07-06",
-      "filing_type": "LLTM01",
-      "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-07-06. Filing type: LLTM01.",
-      "summary_date": "2026-07-07"
-    },
-    {
       "company_number": "OC305934",
       "company_name": "KNIGHT FRANK LLP",
       "filing_date": "2026-07-07",
@@ -505,6 +489,30 @@
       "filing_type": "LLTM01",
       "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-07-13. Filing type: LLTM01.",
       "summary_date": "2026-07-14"
+    },
+    {
+      "company_number": "08720992",
+      "company_name": "MONESE LTD",
+      "filing_date": "2026-07-14",
+      "filing_type": "SH01",
+      "summary": "MONESE LTD (08720992): Shares allotted on 2026-07-14. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-07-15"
+    },
+    {
+      "company_number": "09952199",
+      "company_name": "PLUM FINTECH LIMITED",
+      "filing_date": "2026-07-14",
+      "filing_type": "CH01",
+      "summary": "PLUM FINTECH LIMITED (09952199): Director details changed on 2026-07-14. Director's recorded details updated.",
+      "summary_date": "2026-07-15"
+    },
+    {
+      "company_number": "09092149",
+      "company_name": "STARLING BANK LIMITED",
+      "filing_date": "2026-07-14",
+      "filing_type": "AP01",
+      "summary": "STARLING BANK LIMITED (09092149): Director appointed on 2026-07-14. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
+      "summary_date": "2026-07-15"
     }
   ],
   "known_filings": [
@@ -1287,6 +1295,24 @@
       "filing_date": "2026-07-13",
       "filing_type": "LLTM01",
       "description": "termination-member-limited-liability-partnership-with-name-termination-date"
+    },
+    {
+      "company_number": "08720992",
+      "filing_date": "2026-07-14",
+      "filing_type": "SH01",
+      "description": "capital-allotment-shares"
+    },
+    {
+      "company_number": "09952199",
+      "filing_date": "2026-07-14",
+      "filing_type": "CH01",
+      "description": "change-person-director-company-with-change-date"
+    },
+    {
+      "company_number": "09092149",
+      "filing_date": "2026-07-14",
+      "filing_type": "AP01",
+      "description": "appoint-person-director-company-with-name-date"
     }
   ]
 }

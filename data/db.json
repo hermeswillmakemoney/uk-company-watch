@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-13",
-      "alerts_sent_this_week": 5
+      "alerts_sent_this_week": 6
     }
   },
   "watched_companies": {},
@@ -419,14 +419,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "OC305934",
-      "company_name": "KNIGHT FRANK LLP",
-      "filing_date": "2026-07-07",
-      "filing_type": "LLTM01",
-      "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-07-07. Filing type: LLTM01.",
-      "summary_date": "2026-07-08"
-    },
-    {
       "company_number": "12735852",
       "company_name": "BOUGHT BY MANY LTD",
       "filing_date": "2026-07-09",
@@ -513,6 +505,14 @@
       "filing_type": "AP01",
       "summary": "STARLING BANK LIMITED (09092149): Director appointed on 2026-07-14. \ud83d\udccc New director on the board \u2014 could signal strategic shift or new investment.",
       "summary_date": "2026-07-15"
+    },
+    {
+      "company_number": "02122174",
+      "company_name": "SAVILLS PLC",
+      "filing_date": "2026-07-15",
+      "filing_type": "SH01",
+      "summary": "SAVILLS PLC (02122174): Shares allotted on 2026-07-15. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-07-16"
     }
   ],
   "known_filings": [
@@ -1313,6 +1313,12 @@
       "filing_date": "2026-07-14",
       "filing_type": "AP01",
       "description": "appoint-person-director-company-with-name-date"
+    },
+    {
+      "company_number": "02122174",
+      "filing_date": "2026-07-15",
+      "filing_type": "SH01",
+      "description": "capital-allotment-shares"
     }
   ]
 }

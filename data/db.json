@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-13",
-      "alerts_sent_this_week": 6
+      "alerts_sent_this_week": 7
     }
   },
   "watched_companies": {},
@@ -419,14 +419,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "12735852",
-      "company_name": "BOUGHT BY MANY LTD",
-      "filing_date": "2026-07-09",
-      "filing_type": "CS01",
-      "summary": "BOUGHT BY MANY LTD (12735852): Confirmation statement on 2026-07-09. Annual compliance filing. Confirms company details are current.",
-      "summary_date": "2026-07-09"
-    },
-    {
       "company_number": "09092149",
       "company_name": "STARLING BANK LIMITED",
       "filing_date": "2026-07-09",
@@ -513,6 +505,14 @@
       "filing_type": "SH01",
       "summary": "SAVILLS PLC (02122174): Shares allotted on 2026-07-15. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
       "summary_date": "2026-07-16"
+    },
+    {
+      "company_number": "08157033",
+      "company_name": "BITSTAMP LIMITED",
+      "filing_date": "2026-07-16",
+      "filing_type": "CS01",
+      "summary": "BITSTAMP LIMITED (08157033): Confirmation statement on 2026-07-16. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-07-17"
     }
   ],
   "known_filings": [
@@ -1319,6 +1319,12 @@
       "filing_date": "2026-07-15",
       "filing_type": "SH01",
       "description": "capital-allotment-shares"
+    },
+    {
+      "company_number": "08157033",
+      "filing_date": "2026-07-16",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-updates"
     }
   ]
 }

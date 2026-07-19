@@ -419,22 +419,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "13211214",
-      "company_name": "WISE LIMITED",
-      "filing_date": "2026-07-10",
-      "filing_type": "AA",
-      "summary": "WISE LIMITED (13211214): Accounts on 2026-07-10. Annual accounts filed.",
-      "summary_date": "2026-07-11"
-    },
-    {
-      "company_number": "13264637",
-      "company_name": "DARKTRACE LIMITED",
-      "filing_date": "2026-07-10",
-      "filing_type": "SH19",
-      "summary": "DARKTRACE LIMITED (13264637): Capital Statement Capital Company With Date Currency Figure on 2026-07-10. Filing type: SH19.",
-      "summary_date": "2026-07-11"
-    },
-    {
       "company_number": "00955491",
       "company_name": "TANDEM BANK LIMITED",
       "filing_date": "2026-07-12",

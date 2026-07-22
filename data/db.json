@@ -8,8 +8,8 @@
       "stripe_subscription_id": null,
       "stripe_customer_id": null,
       "subscription_status": "active",
-      "alert_week_start": "2026-07-13",
-      "alerts_sent_this_week": 8
+      "alert_week_start": "2026-07-20",
+      "alerts_sent_this_week": 1
     }
   },
   "watched_companies": {},
@@ -419,22 +419,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "01680058",
-      "company_name": "FOXTONS LIMITED",
-      "filing_date": "2026-07-13",
-      "filing_type": "CH01",
-      "summary": "FOXTONS LIMITED (01680058): Director details changed on 2026-07-13. Director's recorded details updated.",
-      "summary_date": "2026-07-14"
-    },
-    {
-      "company_number": "OC305934",
-      "company_name": "KNIGHT FRANK LLP",
-      "filing_date": "2026-07-13",
-      "filing_type": "LLTM01",
-      "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-07-13. Filing type: LLTM01.",
-      "summary_date": "2026-07-14"
-    },
-    {
       "company_number": "08720992",
       "company_name": "MONESE LTD",
       "filing_date": "2026-07-14",
@@ -481,6 +465,14 @@
       "filing_type": "LLTM01",
       "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-07-17. Filing type: LLTM01.",
       "summary_date": "2026-07-18"
+    },
+    {
+      "company_number": "OC305934",
+      "company_name": "KNIGHT FRANK LLP",
+      "filing_date": "2026-07-21",
+      "filing_type": "LLTM01",
+      "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-07-21. Filing type: LLTM01.",
+      "summary_date": "2026-07-22"
     }
   ],
   "known_filings": [
@@ -1297,6 +1289,12 @@
     {
       "company_number": "OC305934",
       "filing_date": "2026-07-17",
+      "filing_type": "LLTM01",
+      "description": "termination-member-limited-liability-partnership-with-name-termination-date"
+    },
+    {
+      "company_number": "OC305934",
+      "filing_date": "2026-07-21",
       "filing_type": "LLTM01",
       "description": "termination-member-limited-liability-partnership-with-name-termination-date"
     }

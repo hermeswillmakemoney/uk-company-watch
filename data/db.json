@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-20",
-      "alerts_sent_this_week": 2
+      "alerts_sent_this_week": 4
     }
   },
   "watched_companies": {},
@@ -419,14 +419,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "08157033",
-      "company_name": "BITSTAMP LIMITED",
-      "filing_date": "2026-07-16",
-      "filing_type": "CS01",
-      "summary": "BITSTAMP LIMITED (08157033): Confirmation statement on 2026-07-16. Annual compliance filing. Confirms company details are current.",
-      "summary_date": "2026-07-17"
-    },
-    {
       "company_number": "OC305934",
       "company_name": "KNIGHT FRANK LLP",
       "filing_date": "2026-07-17",
@@ -449,6 +441,22 @@
       "filing_type": "RESOLUTIONS",
       "summary": "PLUM FINTECH LIMITED (09952199): Resolution on 2026-07-22. Filing type: RESOLUTIONS.",
       "summary_date": "2026-07-23"
+    },
+    {
+      "company_number": "11434241",
+      "company_name": "CHAINALYSIS UK LIMITED",
+      "filing_date": "2026-07-24",
+      "filing_type": "AA",
+      "summary": "CHAINALYSIS UK LIMITED (11434241): Accounts on 2026-07-24. Annual accounts filed.",
+      "summary_date": "2026-07-25"
+    },
+    {
+      "company_number": "10185006",
+      "company_name": "GRAPHCORE LIMITED",
+      "filing_date": "2026-07-24",
+      "filing_type": "SH01",
+      "summary": "GRAPHCORE LIMITED (10185006): Shares allotted on 2026-07-24. \ud83d\udccc New shares issued \u2014 likely fundraising, employee options, or bringing in a new investor.",
+      "summary_date": "2026-07-25"
     }
   ],
   "known_filings": [
@@ -1279,6 +1287,18 @@
       "filing_date": "2026-07-22",
       "filing_type": "RESOLUTIONS",
       "description": "resolution"
+    },
+    {
+      "company_number": "11434241",
+      "filing_date": "2026-07-24",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-full"
+    },
+    {
+      "company_number": "10185006",
+      "filing_date": "2026-07-24",
+      "filing_type": "SH01",
+      "description": "capital-allotment-shares"
     }
   ]
 }

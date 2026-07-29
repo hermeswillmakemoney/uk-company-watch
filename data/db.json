@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-27",
-      "alerts_sent_this_week": 2
+      "alerts_sent_this_week": 3
     }
   },
   "watched_companies": {},
@@ -97,6 +97,9 @@
     },
     "01680058": {
       "name": "FOXTONS LIMITED"
+    },
+    "16235474": {
+      "name": "16235474 LTD"
     }
   },
   "watchlists": {
@@ -465,6 +468,14 @@
       "filing_type": "CS01",
       "summary": "ONTHEMARKET LIMITED (10887621): Confirmation statement on 2026-07-27. Annual compliance filing. Confirms company details are current.",
       "summary_date": "2026-07-28"
+    },
+    {
+      "company_number": "16235474",
+      "company_name": "16235474 LTD",
+      "filing_date": "2026-08-04",
+      "filing_type": "GAZ1",
+      "summary": "16235474 LTD (16235474): Gazette notice on 2026-08-04. \ud83d\udccc Published in the London Gazette \u2014 often relates to insolvency or strike-off proceedings.",
+      "summary_date": "2026-07-29"
     }
   ],
   "known_filings": [
@@ -1319,6 +1330,12 @@
       "filing_date": "2026-07-27",
       "filing_type": "CS01",
       "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "16235474",
+      "filing_date": "2026-08-04",
+      "filing_type": "GAZ1",
+      "description": "gazette-notice-compulsory"
     }
   ]
 }

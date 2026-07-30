@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-27",
-      "alerts_sent_this_week": 3
+      "alerts_sent_this_week": 6
     }
   },
   "watched_companies": {},
@@ -100,6 +100,15 @@
     },
     "16235474": {
       "name": "16235474 LTD"
+    },
+    "14361848": {
+      "name": "SOLDO LTD"
+    },
+    "15034787": {
+      "name": "HOMELET MANAGEMENT LTD"
+    },
+    "04006623": {
+      "name": "ASOS PLC"
     }
   },
   "watchlists": {
@@ -422,14 +431,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "OC305934",
-      "company_name": "KNIGHT FRANK LLP",
-      "filing_date": "2026-07-21",
-      "filing_type": "LLTM01",
-      "summary": "KNIGHT FRANK LLP (OC305934): Termination Member Limited Liability Partnership With Name Termination Date on 2026-07-21. Filing type: LLTM01.",
-      "summary_date": "2026-07-22"
-    },
-    {
       "company_number": "09952199",
       "company_name": "PLUM FINTECH LIMITED",
       "filing_date": "2026-07-22",
@@ -476,6 +477,30 @@
       "filing_type": "GAZ1",
       "summary": "16235474 LTD (16235474): Gazette notice on 2026-08-04. \ud83d\udccc Published in the London Gazette \u2014 often relates to insolvency or strike-off proceedings.",
       "summary_date": "2026-07-29"
+    },
+    {
+      "company_number": "14361848",
+      "company_name": "SOLDO LTD",
+      "filing_date": "2026-07-29",
+      "filing_type": "AA",
+      "summary": "SOLDO LTD (14361848): Accounts on 2026-07-29. Annual accounts filed.",
+      "summary_date": "2026-07-30"
+    },
+    {
+      "company_number": "15034787",
+      "company_name": "HOMELET MANAGEMENT LTD",
+      "filing_date": "2026-07-29",
+      "filing_type": "CS01",
+      "summary": "HOMELET MANAGEMENT LTD (15034787): Confirmation statement on 2026-07-29. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-07-30"
+    },
+    {
+      "company_number": "04006623",
+      "company_name": "ASOS PLC",
+      "filing_date": "2026-07-30",
+      "filing_type": "CS01",
+      "summary": "ASOS PLC (04006623): Confirmation statement on 2026-07-30. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-07-30"
     }
   ],
   "known_filings": [
@@ -1336,6 +1361,24 @@
       "filing_date": "2026-08-04",
       "filing_type": "GAZ1",
       "description": "gazette-notice-compulsory"
+    },
+    {
+      "company_number": "14361848",
+      "filing_date": "2026-07-29",
+      "filing_type": "AA",
+      "description": "accounts-with-accounts-type-dormant"
+    },
+    {
+      "company_number": "15034787",
+      "filing_date": "2026-07-29",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "04006623",
+      "filing_date": "2026-07-30",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
     }
   ]
 }

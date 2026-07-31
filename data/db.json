@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-07-27",
-      "alerts_sent_this_week": 6
+      "alerts_sent_this_week": 8
     }
   },
   "watched_companies": {},
@@ -109,6 +109,12 @@
     },
     "04006623": {
       "name": "ASOS PLC"
+    },
+    "09736376": {
+      "name": "CLEARBANK LIMITED"
+    },
+    "06968588": {
+      "name": "FUNDING CIRCLE LTD"
     }
   },
   "watchlists": {
@@ -431,14 +437,6 @@
   },
   "filing_summaries": [
     {
-      "company_number": "09952199",
-      "company_name": "PLUM FINTECH LIMITED",
-      "filing_date": "2026-07-22",
-      "filing_type": "RESOLUTIONS",
-      "summary": "PLUM FINTECH LIMITED (09952199): Resolution on 2026-07-22. Filing type: RESOLUTIONS.",
-      "summary_date": "2026-07-23"
-    },
-    {
       "company_number": "11434241",
       "company_name": "CHAINALYSIS UK LIMITED",
       "filing_date": "2026-07-24",
@@ -501,6 +499,22 @@
       "filing_type": "CS01",
       "summary": "ASOS PLC (04006623): Confirmation statement on 2026-07-30. Annual compliance filing. Confirms company details are current.",
       "summary_date": "2026-07-30"
+    },
+    {
+      "company_number": "09736376",
+      "company_name": "CLEARBANK LIMITED",
+      "filing_date": "2026-07-30",
+      "filing_type": "TM01",
+      "summary": "CLEARBANK LIMITED (09736376): Director terminated on 2026-07-30. \ud83d\udccc A director's appointment was formally ended.",
+      "summary_date": "2026-07-31"
+    },
+    {
+      "company_number": "06968588",
+      "company_name": "FUNDING CIRCLE LTD",
+      "filing_date": "2026-07-30",
+      "filing_type": "CS01",
+      "summary": "FUNDING CIRCLE LTD (06968588): Confirmation statement on 2026-07-30. Annual compliance filing. Confirms company details are current.",
+      "summary_date": "2026-07-31"
     }
   ],
   "known_filings": [
@@ -1376,6 +1390,18 @@
     },
     {
       "company_number": "04006623",
+      "filing_date": "2026-07-30",
+      "filing_type": "CS01",
+      "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "09736376",
+      "filing_date": "2026-07-30",
+      "filing_type": "TM01",
+      "description": "termination-director-company-with-name-termination-date"
+    },
+    {
+      "company_number": "06968588",
       "filing_date": "2026-07-30",
       "filing_type": "CS01",
       "description": "confirmation-statement-with-no-updates"

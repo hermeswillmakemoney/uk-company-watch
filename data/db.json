@@ -9,7 +9,7 @@
       "stripe_customer_id": null,
       "subscription_status": "active",
       "alert_week_start": "2026-08-03",
-      "alerts_sent_this_week": 1
+      "alerts_sent_this_week": 3
     }
   },
   "watched_companies": {},
@@ -118,6 +118,9 @@
     },
     "16594137": {
       "name": "THE ACUPUNCTURE FACULTY LTD"
+    },
+    "08657841": {
+      "name": "LANDLORD VISION LTD"
     }
   },
   "watchlists": {
@@ -510,6 +513,22 @@
       "filing_type": "CS01",
       "summary": "THE ACUPUNCTURE FACULTY LTD (16594137): Confirmation statement on 2026-08-02. Annual compliance filing. Confirms company details are current.",
       "summary_date": "2026-08-03"
+    },
+    {
+      "company_number": "13264637",
+      "company_name": "DARKTRACE LIMITED",
+      "filing_date": "2026-08-03",
+      "filing_type": "MISC",
+      "summary": "DARKTRACE LIMITED (13264637): Miscellaneous on 2026-08-03. Filing type: MISC.",
+      "summary_date": "2026-08-04"
+    },
+    {
+      "company_number": "08657841",
+      "company_name": "LANDLORD VISION LTD",
+      "filing_date": "2026-08-03",
+      "filing_type": "RP01CS01",
+      "summary": "LANDLORD VISION LTD (08657841): Replacement Filing Of Confirmation Statement With Made Up Date on 2026-08-03. Filing type: RP01CS01.",
+      "summary_date": "2026-08-04"
     }
   ],
   "known_filings": [
@@ -1406,6 +1425,18 @@
       "filing_date": "2026-08-02",
       "filing_type": "CS01",
       "description": "confirmation-statement-with-no-updates"
+    },
+    {
+      "company_number": "13264637",
+      "filing_date": "2026-08-03",
+      "filing_type": "MISC",
+      "description": "miscellaneous"
+    },
+    {
+      "company_number": "08657841",
+      "filing_date": "2026-08-03",
+      "filing_type": "RP01CS01",
+      "description": "replacement-filing-of-confirmation-statement-with-made-up-date"
     }
   ]
 }
